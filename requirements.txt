@@ -1,0 +1,9 @@
+scikit-video 
+tensorflow
+imutils 
+opencv-python==3.4.11.41 
+SoccerNet 
+moviepy 
+scikit-learn
+nvidia-tensorrt
+ffmpy
