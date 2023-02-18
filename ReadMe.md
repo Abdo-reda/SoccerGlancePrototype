@@ -10,6 +10,14 @@
 
 //Note: that -y makes every prompt yes
 
+### New Environment
+* conda create -y -n MyNewPrototype python=3.9
+* conda activate MyNewPrototype
+* conda install -y cudnn=8.2
+* conda install -y cudatoolkit=11.3
+* conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
+* pip3 install -r requirements.txt
+
 
 ### Using the Prototype
 
@@ -35,3 +43,7 @@
 - Tensor RT is probably not needed ...
 
 - PCI_ID 0000:02:00.0 ... I think
+
+- Whisper requires python version 3.9, I am scared that if I change the python version then the whole prototype will collapse, could create another conda env just in case ...
+    - for new version git+https://github.com/openai/whisper.git
+    - for python=3.7 version openai-whisper==20230124

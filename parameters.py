@@ -113,6 +113,10 @@ def setManualParameters(args):
     args.NMS_threshold
     args.max_num_worker
     args.seed
+    args.num_classes = 17
+    args.input_features = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/tests/HQ_Test.npy'
+    args.output_folder = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/tests/tempResults/'
+    args.window_size_frame = args.window_size*int(args.framerate)
 
 
     return args

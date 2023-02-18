@@ -20,13 +20,12 @@ def get_stream(url):
             else:
                 raise
         break
-
     stream_url = streams["best"]
     m3u8_obj = m3u8.load(stream_url.args['url'])
     return m3u8_obj.segments[0] 
 
 
-def dl_stream(url, filename):
+def dl_stream(dir_path, url, filename):
     """
     Download each chunk to file
     input: url, filename
@@ -61,7 +60,7 @@ def dl_stream(url, filename):
             pre_time_stamp = cur_time_stamp
             time.sleep(stream_segment.duration) #Wait duration time - 1
 
-            tsToMp4(newFileName, i)
+            tsToMp4(dir_path, newFileName, i)
             file.close()
             os.remove(newFileName)
         
@@ -73,20 +72,19 @@ def dl_stream(url, filename):
             
     return None
 
-def tsToMp4(saved_video_file, idx):
-    if not os.path.exists(dir_path + '/input_stream'):
-        os.makedirs(dir_path + '/input_stream')
-    
+def tsToMp4(dir_path, saved_video_file, idx):
     if idx < 10:
         output_file = dir_path + '/input_stream/input_chunk0' + str(idx) + '.mp4'
     else:
         output_file = dir_path + '/input_stream/input_chunk' + str(idx) + '.mp4'
-
     print(saved_video_file, output_file)
     subprocess.run('ffmpeg -i ' + saved_video_file + ' ' + output_file, shell=True)
 
-       
-dir_path = os.path.dirname(os.path.realpath(__file__))
-tempFile = dir_path + '/temp/temp.ts'  #files are format ts, open cv can view them
-videoURL = 'https://www.youtube.com/watch?v=jDpVRarF9UM&ab_channel=WhiskeyBluesLounge' # test stream
-dl_stream(videoURL, tempFile)
+def initialize():
+    dir_path = os.path.dirname(os.path.realpath(__file__))
+    temp_file = dir_path + '/temp/temp.ts'  #files are format ts, open cv can view them
+    videoURL = 'https://www.youtube.com/watch?v=jDpVRarF9UM&ab_channel=WhiskeyBluesLounge' # test stream
+    dl_stream(dir_path, videoURL, temp_file)
+
+if __name__ == "__main__":
+    initialize()

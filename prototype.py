@@ -65,7 +65,7 @@ if __name__ == "__main__":
             logging.StreamHandler()
         ])
 
-    #----I think this sets up the values for some environment variables, this could be important ..
+    #----I think this sets up the values for some environment variables, not sure if they are used but they could be important ..
     if args.GPU >= 0:
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = str(args.GPU)

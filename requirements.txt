@@ -9,3 +9,4 @@ nvidia-tensorrt
 ffmpy
 m3u8
 streamlink
+git+https://github.com/openai/whisper.git
