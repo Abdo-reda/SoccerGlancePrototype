@@ -13,7 +13,7 @@ def main(args):
     print(":)")
     start=time.time()
 
-    # 1---- Convert from a resolution to LQ ... is this needed ? ...   
+    # 1---- Convert from a HQ resolution to LQ ... is this needed ? ...   
     '''
     logging.info('-----------------Start Step1: Extracting Features .......')
     convert_video(args, "tests/HQ_Test.mp4", "tests/LQ_Test.mp4")
@@ -65,7 +65,7 @@ if __name__ == "__main__":
             logging.StreamHandler()
         ])
 
-    #----not sure what this does and if its important ..
+    #----I think this sets up the values for some environment variables, this could be important ..
     if args.GPU >= 0:
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = str(args.GPU)

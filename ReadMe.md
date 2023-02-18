@@ -13,11 +13,11 @@
 
 ### Using the Prototype
 
-conda activate MyPrototype
+`conda activate MyPrototype`
 
-python3 prototype.py --path_video "tests/HQ_Test.mp4" --path_output "tests/HQ_Test.npy" --video_res HQ --start 0 --duration 60 --overwrite --PCA "feature_extraction/pca_512_TF2.pkl" --PCA_scaler "feature_extraction/average_512_TF2.pkl" --model_name=NetVLAD++ --features=ResNET_TF2_PCA512.npy --feature_dim=512 --NMS_threshold=0.3
+`python3 prototype.py --path_video "tests/HQ_Test.mp4" --path_output "tests/HQ_Test.npy" --video_res HQ --start 0 --duration 60 --overwrite --PCA "feature_extraction/pca_512_TF2.pkl" --PCA_scaler "feature_extraction/average_512_TF2.pkl" --model_name=NetVLAD++ --features=ResNET_TF2_PCA512.npy --feature_dim=512 --NMS_threshold=0.3`
 
-python3 prototype.py --path_video "tests/LQ_Test.mp4" --path_output "tests/LQ_Test.npy" --video_res LQ --start 0 --duration 60 --overwrite --PCA "feature_extraction/pca_512_TF2.pkl" --PCA_scaler "feature_extraction/average_512_TF2.pkl" --model_name=NetVLAD++ --features=ResNET_TF2_PCA512.npy --feature_dim=512 --NMS_threshold=0.3
+`python3 prototype.py --path_video "tests/LQ_Test.mp4" --path_output "tests/LQ_Test.npy" --video_res LQ --start 0 --duration 60 --overwrite --PCA "feature_extraction/pca_512_TF2.pkl" --PCA_scaler "feature_extraction/average_512_TF2.pkl" --model_name=NetVLAD++ --features=ResNET_TF2_PCA512.npy --feature_dim=512 --NMS_threshold=0.3`
 
 //Note: there is a difference in the name of the features for some reason that the model accepts
 

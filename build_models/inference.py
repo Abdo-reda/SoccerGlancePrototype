@@ -41,18 +41,11 @@ def invokeInference(args):
     
     '''
  
-
-    #--------------Set up some used variables (temporary)
-    tempNumClasses = 17
-    file_inference_features = '/home/g05-f22/Desktop/ActionSpotting/Prototype/tests/HQ_Test.npy'
-    output_folder = '/home/g05-f22/Desktop/ActionSpotting/Prototype/tests/'
-    window_size_frame = args.window_size*int(args.framerate)
     #test_id = '0'
    
-
     #-------------------- create/builds model
     model = Model(weights=args.load_weights, input_size=args.feature_dim,
-                  num_classes=tempNumClasses, window_size=args.window_size, 
+                  num_classes=args.num_classes, window_size=args.window_size, 
                   vocab_size = args.vocab_size,
                   framerate=int(args.framerate), pool=args.pool).cuda()
     
@@ -67,9 +60,9 @@ def invokeInference(args):
     #----------------------------Inference time
 
     #------Adjust the features/input to the model
-    inference_features = np.load(file_inference_features)
+    inference_features = np.load(args.input_features)
     inference_features = inference_features.reshape(-1, inference_features.shape[-1]) #invert ..
-    inference_features = feats2clip(torch.from_numpy(inference_features), stride=1, off=int(window_size_frame/2), clip_length=window_size_frame)
+    inference_features = feats2clip(torch.from_numpy(inference_features), stride=1, off=int(args.window_size_frame/2), clip_length=args.window_size_frame)
     inference_features = inference_features.squeeze(0) #removes a dimension for some reason ... 
 
     #------I think we divide the input into chunks ...
@@ -117,7 +110,7 @@ def invokeInference(args):
     json_data["predictions"] = list()
 
     for half, timestamp in enumerate([timestamp_inference]):
-        for l in range(tempNumClasses):
+        for l in range(args.num_classes):
             spots = get_spot(
                 timestamp[:, l], window=args.NMS_window*framerate, thresh=args.NMS_threshold)
             for spot in spots:
@@ -138,8 +131,8 @@ def invokeInference(args):
                 prediction_data["confidence"] = str(confidence)
                 json_data["predictions"].append(prediction_data)
                 
-    os.makedirs(os.path.join("models", args.model_name, output_folder), exist_ok=True)
-    with open(os.path.join("models", args.model_name, output_folder, "results_spotting.json"), 'w') as output_file:
+    os.makedirs(os.path.join("models", args.model_name, args.output_folder), exist_ok=True)
+    with open(os.path.join("models", args.model_name, args.output_folder, "results_spotting.json"), 'w') as output_file:
         json.dump(json_data, output_file, indent=4)
 
 
