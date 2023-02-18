@@ -14,14 +14,14 @@ def generate_chunks(video, audio, chunk_size, fps, counter):
         if counter < 10:
             counter = '0' + str(counter)
 
-        video.subclip(i, i+chunk_size).write_videofile("..\\generated_chunks\\video_chunks\\video_chunk{}.mp4".format(counter),fps=fps)
-        audio.subclip(i, i+chunk_size).write_audiofile("..\\generated_chunks\\audio_chunks\\audio_chunk{}.mp3".format(counter))
+        video.subclip(i, i+chunk_size).write_videofile("../generated_chunks/video_chunks/video_chunk{}.mp4".format(counter),fps=fps)
+        audio.subclip(i, i+chunk_size).write_audiofile("../generated_chunks/audio_chunks/audio_chunk{}.mp3".format(counter))
     if rem != 0:
         counter += 1
         if counter < 10:
             counter = '0' + str(counter)
-        video.subclip(length, length+rem).write_videofile("..\\generated_chunks\\video_chunks\\video_chunk{}.mp4".format(counter),fps=fps)
-        audio.subclip(length, length+rem).write_audiofile("..\\generated_chunks\\audio_chunks\\audio_chunk{}.mp3".format(counter))
+        video.subclip(length, length+rem).write_videofile("../generated_chunks/video_chunks/video_chunk{}.mp4".format(counter),fps=fps)
+        audio.subclip(length, length+rem).write_audiofile("../generated_chunks/audio_chunks/audio_chunk{}.mp3".format(counter))
 
     print('Chunks generated. Deleting ' + input_file + '...')
     os.remove(input_path) # delete the input file after generating the chunks
@@ -29,7 +29,7 @@ def generate_chunks(video, audio, chunk_size, fps, counter):
 
 
 
-cwd = os.getcwd().split('\\')[-1]
+cwd = os.path.basename(os.getcwd())
 if cwd != 'scripts':
     print('Please CD into the scripts folder and rerun the generate_chunks.py script.')
     exit()
@@ -37,9 +37,9 @@ if cwd != 'scripts':
 
 
 # check if the input folder exists
-if not os.path.exists('..\\input_stream'):
+if not os.path.exists('../input_stream'):
     print('Creating the input folder...')
-    os.makedirs('..\\input_stream')
+    os.makedirs('../input_stream')
 
 
 
@@ -48,7 +48,7 @@ if not os.path.exists('..\\input_stream'):
 print('Waiting for input video files...')
 label = False
 while True:
-    files = os.listdir('..\\input_stream')
+    files = os.listdir('../input_stream')
     added = [file for file in files if file.endswith('.mp4')]
     
     if added:
@@ -57,23 +57,23 @@ while True:
             input_file = file
             print('Input file found: ' + input_file)
             # load the video and audio
-            input_path = '..\\input_stream\\' + input_file
+            input_path = '../input_stream/' + input_file
             time.sleep(3) # wait for the file to be fully copied to the input folder
             video = VideoFileClip(input_path)
             audio = video.audio
 
             # create the output folders if they don't exist
-            if not os.path.exists('..\\generated_chunks'):
-                os.makedirs('..\\generated_chunks')
-            if not os.path.exists('..\\generated_chunks\\video_chunks'):
-                os.makedirs('..\\generated_chunks\\video_chunks')
-            if not os.path.exists('..\\generated_chunks\\audio_chunks'):
-                os.makedirs('..\\generated_chunks\\audio_chunks')
+            if not os.path.exists('../generated_chunks'):
+                os.makedirs('../generated_chunks')
+            if not os.path.exists('../generated_chunks/video_chunks'):
+                os.makedirs('../generated_chunks/video_chunks')
+            if not os.path.exists('../generated_chunks/audio_chunks'):
+                os.makedirs('../generated_chunks/audio_chunks')
 
 
 
             # check if there are any chunks left from the previous run
-            res = [file for file in os.listdir('..\\generated_chunks\\video_chunks') if file.endswith('.mp4')]
+            res = [file for file in os.listdir('../generated_chunks/video_chunks') if file.endswith('.mp4')]
             max_chunk = 0
             for file in res:
                 chunk = int(file.split('video_chunk')[1].split('.mp4')[0])

@@ -1,0 +1,6 @@
+*.ts
+*.exe
+temp
+*.mp4
+*.mp3
+/generated_chunks/transcript_chunks/*.txt

@@ -7,3 +7,5 @@ moviepy
 scikit-learn
 nvidia-tensorrt
 ffmpy
+m3u8
+streamlink
