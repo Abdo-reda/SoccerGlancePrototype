@@ -32,7 +32,7 @@ from SoccerNet.DataLoader import Frame, FrameCV
 
 class VideoFeatureExtractor():
     def __init__(self,
-                 feature="ResNET",
+                 features_type="ResNET",
                  back_end="TF2",
                  overwrite=False,
                  transform="crop",
@@ -40,7 +40,7 @@ class VideoFeatureExtractor():
                  FPS=2.0,
                  split="all"):
 
-        self.feature = feature
+        self.features_type = features_type
         self.back_end = back_end
         self.verbose = True
         self.transform = transform
@@ -49,9 +49,7 @@ class VideoFeatureExtractor():
         self.FPS = FPS
         self.split = split
 
-
         if "TF2" in self.back_end:
-
             # create pretrained encoder (here ResNet152, pre-trained on ImageNet)
             base_model = keras.applications.resnet.ResNet152(include_top=True,
                                                              weights='imagenet',
@@ -62,15 +60,15 @@ class VideoFeatureExtractor():
 
             # define model with output after polling layer (dim=2048)
             self.model = Model(base_model.input,
-                               outputs=[base_model.get_layer("avg_pool").output]) #functional api not sequential, so we don't have to specify the input dimensions ... 
+                               outputs=[base_model.get_layer("avg_pool").output])  # functional api not sequential, so we don't have to specify the input dimensions ...
             self.model.trainable = False
 
-        
     def extractFeatures(self, path_video_input, path_features_output, start=None, duration=None, overwrite=False):
         logging.info(f"extracting features for video {path_video_input}")
 
         if os.path.exists(path_features_output) and not overwrite:
-            logging.info("Features already exists, use overwrite=True to overwrite them. Exiting.")
+            logging.info(
+                "Features already exists, use overwrite=True to overwrite them. Exiting.")
             return
         if "TF2" in self.back_end:
 
@@ -86,12 +84,14 @@ class VideoFeatureExtractor():
             if duration is None:
                 duration = videoLoader.time_second
 
-            logging.info(f"frames {frames.shape}, fps={frames.shape[0]/duration}")
+            logging.info(
+                f"frames {frames.shape}, fps={frames.shape[0]/duration}")
 
             # predict the features from the frames (adjust batch size for smaller GPU)
             features = self.model.predict(frames, batch_size=64, verbose=1)
 
-            logging.info(f"features {features.shape}, fps={features.shape[0]/duration}")
+            logging.info(
+                f"features {features.shape}, fps={features.shape[0]/duration}")
 
         # save the featrue in .npy format
         os.makedirs(os.path.dirname(path_features_output), exist_ok=True)
@@ -103,7 +103,7 @@ class PCAReducer():
         self.pca_file = pca_file
         self.scaler_file = scaler_file
         self.loadPCA()
-    
+
     def loadPCA(self):
         # Read pre-computed PCA
         self.pca = None
@@ -132,30 +132,43 @@ class PCAReducer():
         np.save(output_features, feat)
 
 
-def invokeExtraction(args):
-   
-  
-    # calls VideoFeatureExtractor
+def buildFeatureExtractor(
+    features_type,
+    back_end,
+    transform,
+    grabber,
+    FPS,
+):
     myFeatureExtractor = VideoFeatureExtractor(
-        feature=args.features,
-        back_end=args.back_end,
-        transform=args.transform,
-        grabber=args.grabber,
-        FPS=args.framerate)
+        features_type, back_end, transform, grabber, FPS)
+    return myFeatureExtractor
 
-    #extract features ...
-    myFeatureExtractor.extractFeatures(path_video_input=args.path_video,
-                                       path_features_output=args.path_output,
-                                       start=args.start,
-                                       duration=args.duration,
-                                       overwrite=args.overwrite)
 
-    #reduce features ...
-    if args.PCA is not None or args.PCA_scaler is not None:
-        myPCAReducer = PCAReducer(pca_file=args.PCA,
-                                  scaler_file=args.PCA_scaler)
+def buildPCAReducer(pca_file, scaler_file):
+    myPCAReducer = None
+    if pca_file is not None or scaler_file is not None:
+        myPCAReducer = PCAReducer(pca_file, scaler_file)
+    return myPCAReducer
 
-        myPCAReducer.reduceFeatures(input_features=args.path_output,
-                                    output_features=args.path_output,
-                                    overwrite=args.overwrite)
 
+def invokeExtraction(
+    myFeatureExtractor,
+    myPCAReducer,
+    path_video_input,
+    path_features_output,
+    start,
+    duration,
+    overwrite,
+):
+    # extract features ...
+    myFeatureExtractor.extractFeatures(path_video_input,
+                                       path_features_output,
+                                       start,
+                                       duration,
+                                       overwrite)
+
+    # reduce features ...
+    if myPCAReducer:
+        myPCAReducer.reduceFeatures(input_features=path_features_output,
+                                    output_features=path_features_output,
+                                    overwrite=overwrite)

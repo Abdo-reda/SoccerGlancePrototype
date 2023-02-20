@@ -1,7 +1,7 @@
 
 
 ### Setup Enviornment 
-* conda create -y -n MyPrototype python=3.7
+* conda create -y -n MyPrototype python=3.7 OR conda create -y -n MyNewPrototype python=3.9
 * conda activate MyPrototype
 * conda install -y cudnn=8.2
 * conda install -y cudatoolkit=11.3
@@ -9,14 +9,6 @@
 * pip3 install -r requirements.txt
 
 //Note: that -y makes every prompt yes
-
-### New Environment
-* conda create -y -n MyNewPrototype python=3.9
-* conda activate MyNewPrototype
-* conda install -y cudnn=8.2
-* conda install -y cudatoolkit=11.3
-* conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia
-* pip3 install -r requirements.txt
 
 
 ### Using the Prototype
@@ -47,3 +39,7 @@
 - Whisper requires python version 3.9, I am scared that if I change the python version then the whole prototype will collapse, could create another conda env just in case ...
     - for new version git+https://github.com/openai/whisper.git
     - for python=3.7 version openai-whisper==20230124
+
+- Something wrong when pip3 install -r requirements.txt, I am doing it one by one manually.
+    - I found the problem, it was opencv-python==3.4.11.41 
+    - I will install an updated opencv ... 

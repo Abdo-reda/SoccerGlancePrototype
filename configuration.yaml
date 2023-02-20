@@ -1,0 +1,30 @@
+feature_configuration:
+  back_end: TF2
+  feature_reducer: pca_512_TF2.pkl
+  features_type: BAIDU
+  framerate: 1.0
+  grabber: opencv
+  input_path: /chunk_generator/generated_chunks/video_chunks/
+  output_path: /generated_features/
+  overwrite: true
+  reduce_feature_type: PCA
+  transform: crop
+  video_res: LQ
+inference_configuration:
+  NMS_threshold: 0.0
+  NMS_window: 30
+  framerate: 1.0
+  input_path: /generated_features/
+  num_classes: 17
+  output_path: /generated_output/NetVLAD
+  version: 2
+  window_size_frame: 15
+model_configuration:
+  feature_dim: 512
+  framerate: 1
+  model_name: NetVLAD
+  num_classes: 17
+  pool: NetVLAD++
+  vocab_size: 64
+  weights: null
+  window_size: 15

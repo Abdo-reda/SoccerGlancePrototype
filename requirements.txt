@@ -1,12 +1,13 @@
 scikit-video 
+scikit-learn
 tensorflow
 imutils 
-opencv-python==3.4.11.41 
+opencv-python
 SoccerNet 
 moviepy 
-scikit-learn
 nvidia-tensorrt
 ffmpy
 m3u8
 streamlink
+pyyaml
 git+https://github.com/openai/whisper.git
