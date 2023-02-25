@@ -6,6 +6,7 @@ import torch
 from SoccerNet.Evaluation.utils import AverageMeter, EVENT_DICTIONARY_V2, INVERSE_EVENT_DICTIONARY_V2
 from SoccerNet.Evaluation.utils import EVENT_DICTIONARY_V1, INVERSE_EVENT_DICTIONARY_V1
 import json
+import datetime
 
 
 def feats2clip(feats, stride, clip_length, padding="replicate_last", off=0):
@@ -30,29 +31,23 @@ def feats2clip(feats, stride, clip_length, padding="replicate_last", off=0):
     return feats[idx, ...]  # now its divided int windows with apt padding...
 
 
-def buildModel(
-        weights,
-        input_size,
-        num_classes,
-        window_size,
-        vocab_size,
-        framerate,
-        pool,
-        model_name):
+def buildModel(model_configuration):
     # -------------------- create/builds model
-    model = Model(weights,
-                  input_size,
-                  num_classes,
-                  window_size,
-                  vocab_size,
-                  framerate,
-                  pool).cuda()
+    model = Model(
+        weights=model_configuration['weights'],
+        input_size=model_configuration['feature_dim'],
+        num_classes=model_configuration['num_classes'],
+        window_size=model_configuration['window_size'],
+        vocab_size=model_configuration['vocab_size'],
+        framerate=model_configuration['framerate'],
+        pool=model_configuration['pool']
+    ).cuda()
 
     logging.info(model)
 
     # --------------Loads the model // For the best model only
     checkpoint = torch.load(os.path.join(
-        "models", model_name, "model.pth.tar"))
+        "build_models/models", model_configuration['model_name'], "model.pth.tar"))
     model.load_state_dict(checkpoint['state_dict'])
 
     return model
@@ -67,15 +62,15 @@ def invokeInference(
         NMS_window,
         NMS_threshold,
         version,
-        model_name,
-        output_folder):
+        output_folder,
+        chunk_num,
+        chunk_size, 
+        ):
     '''
         TODO:
             * Seperate the directory of the test and file name, actually just assume we have a default directory for our tests maybe and you just want a name ...
             * fix everything !
     '''
-
-    # test_id = '0'
 
     # ----------------------------Inference time
 
@@ -144,11 +139,11 @@ def invokeInference(
                 frame_index = int(spot[0])
                 confidence = spot[1]
                 # confidence = predictions_half_1[frame_index,
-                seconds = int((frame_index//framerate) % 60)
-                minutes = int((frame_index//framerate)//60)
+                seconds = int((frame_index//framerate) % 60) + chunk_num*chunk_size
+                #minutes = int((frame_index//framerate)//60)
                 prediction_data = dict()
                 prediction_data["gameTime"] = str(
-                    half+1) + " - " + str(minutes) + ":" + str(seconds)
+                    half+1) + " - " + str(datetime.timedelta(seconds=seconds))
                 if version == 2:
                     prediction_data["label"] = INVERSE_EVENT_DICTIONARY_V2[l]
                 else:
@@ -159,9 +154,23 @@ def invokeInference(
                 prediction_data["confidence"] = str(confidence)
                 json_data["predictions"].append(prediction_data)
 
-    os.makedirs(os.path.join("models", model_name,
-                output_folder), exist_ok=True)
-    with open(os.path.join("models", model_name, output_folder, "results_spotting.json"), 'w') as output_file:
+    with open(os.path.join(output_folder, "results_spotting.json"), 'a+') as output_file:
         json.dump(json_data, output_file, indent=4)
+        output_file.write('\n//---------------------------- NEW CHUNK ------------------------------\n')
 
     return
+
+def generateOutput(model, inference_configuration, chunk_num, chunk_size):
+    invokeInference(
+        model=model, 
+        input_features=inference_configuration['input_path'],
+        window_size_frame=inference_configuration['window_size_frame'],
+        framerate=inference_configuration['framerate'],
+        num_classes=inference_configuration['num_classes'],
+        NMS_window=inference_configuration['NMS_window'],
+        NMS_threshold=inference_configuration['NMS_threshold'],
+        version=inference_configuration['version'],
+        output_folder=inference_configuration['output_path'],
+        chunk_num = chunk_num,
+        chunk_size = chunk_size,
+    )

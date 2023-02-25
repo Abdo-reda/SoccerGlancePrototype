@@ -1,0 +1,11 @@
+TODO:
+    * Rename generate_transcrptions
+    * Move the folder models inside the build_models
+    * Make the folder Tests include logs
+
+
+
+----
+
+* create folder run_[data/time]
+    //this folder will contain a log file and an outputfile

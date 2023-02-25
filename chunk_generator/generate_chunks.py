@@ -63,16 +63,16 @@ def generate_chunks(dir_path, input_path, video, audio, chunk_size, fps, counter
     for i in range(0, int(length), chunk_size):
         counter += 1
         if counter < 10:
-            counter = '0' + str(counter)
+            counter_name = '0' + str(counter)
 
-        video.subclip(i, i+chunk_size).write_videofile(dir_path + '/generated_chunks/video_chunks/video_chunk{}.mp4'.format(counter),fps=fps)
-        audio.subclip(i, i+chunk_size).write_audiofile(dir_path + '/generated_chunks/audio_chunks/audio_chunk{}.mp3'.format(counter))
+        video.subclip(i, i+chunk_size).write_videofile(dir_path + '/generated_chunks/video_chunks/video_chunk{}.mp4'.format(counter_name),fps=fps)
+        audio.subclip(i, i+chunk_size).write_audiofile(dir_path + '/generated_chunks/audio_chunks/audio_chunk{}.mp3'.format(counter_name))
     if rem != 0:
         counter += 1
         if counter < 10:
-            counter = '0' + str(counter)
-        video.subclip(length, length+rem).write_videofile(dir_path + '/generated_chunks/video_chunks/video_chunk{}.mp4'.format(counter),fps=fps)
-        audio.subclip(length, length+rem).write_audiofile(dir_path + '/generated_chunks/audio_chunks/audio_chunk{}.mp3'.format(counter))
+            counter_name = '0' + str(counter)
+        video.subclip(length, length+rem).write_videofile(dir_path + '/generated_chunks/video_chunks/video_chunk{}.mp4'.format(counter_name),fps=fps)
+        audio.subclip(length, length+rem).write_audiofile(dir_path + '/generated_chunks/audio_chunks/audio_chunk{}.mp3'.format(counter_name))
 
     print('Chunks generated. Deleting ' + input_path + '...')
     os.remove(input_path) # delete the input file after generating the chunks

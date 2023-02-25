@@ -4,7 +4,7 @@ import logging
 from datetime import datetime
 from parameters import *
 from build_models.inference import invokeInference, buildModel
-from feature_extraction.VideoFeatureExtractor import invokeExtraction
+from feature_extraction.feature_extractor import invokeExtraction
 from feature_extraction.ConvertHQtoLQ import convert_video
 
 
@@ -46,7 +46,6 @@ def main(args):
         start=args.start,
         duration=args.duration,
         overwrite=args.overwrite,
-
     )
     step2 = time.time()
     logging.info(f'-----------------Time for Step2: {step2 - start} seconds')

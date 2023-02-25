@@ -1,18 +1,22 @@
 import yaml
+import os
 
 
 class Configuration:
     def __init__(
             self,
-            configuration_file='/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/configuration.yaml'
+            configuration_path='/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/configuration.yaml'
     ):
-        self.configuration_file = configuration_file
+        self.configuration_path = configuration_path
+        self.configuration_file = open(self.configuration_path, 'r+')
+        self.configuration_file.seek(0)
 
     def get_default_configuration(self):
-        framerate = 1.0
+        default_path = os.path.dirname(os.path.realpath(__file__))
+        framerate = 2.0
         window_size = 15
         num_classes = 17
-        model_name = 'NetVLAD'
+        model_name = 'NetVLAD++'
         data = {
             'model_configuration': {
                 'weights': None,
@@ -26,25 +30,25 @@ class Configuration:
             },
             'feature_configuration': {
                 'features_type': 'BAIDU',   #
-                'input_path': '/chunk_generator/generated_chunks/video_chunks/',
-                'output_path': '/generated_features/',
+                'input_path': default_path + '/chunk_generator/generated_chunks/video_chunks/',
+                'output_path': default_path + '/feature_extraction/generated_features/',
                 'overwrite': True,
                 'video_res': 'LQ',
                 'back_end': 'TF2',
                 'transform': 'crop',
                 'grabber': 'opencv',
                 'framerate': framerate,  # needs to be float
-                'reduce_feature_type': 'PCA',
-                'feature_reducer': 'pca_512_TF2.pkl',
+                'feature_reducer_type': 'PCA',
+                'feature_reducer_path': default_path + '/feature_extraction/pca_512_TF2.pkl',
             },
             'inference_configuration': {
-                'input_path': '/generated_features/',
-                'output_path': '/generated_output/' + model_name,
+                'input_path': default_path + '/feature_extraction/generated_features/',
+                'output_path': default_path + '/output_generation/generated_output/',
                 'window_size_frame': window_size * int(framerate),
                 'framerate': framerate,
                 'num_classes': num_classes,
                 'NMS_window': 30,
-                'NMS_threshold': 0.0,
+                'NMS_threshold': 0.6,
                 'version': 2,
             }
         }
@@ -52,15 +56,15 @@ class Configuration:
 
     def save_configuration(self):
         data = self.get_default_configuration()
-        with open(self.configuration_file, 'w') as f:
-            yaml.dump(data, f)
+        yaml.dump(data, self.configuration_file)
+        self.configuration_file.seek(0)
 
     def update_configuration(self):
         data = self.get_default_configuration()
         yaml.dump(data, self.configuration_file)
 
     def get_configuration(self):
-        return yaml.load(self.configuration_file)
+        return yaml.safe_load(self.configuration_file)
 
     def validate_configuration(data):
         # this function will later be used to validate the data returned from the get_configuration ...
@@ -81,3 +85,7 @@ class Configuration:
 if __name__ == "__main__":
     myConfiguration = Configuration()
     myConfiguration.save_configuration()
+    # print(myConfiguration.get_configuration())
+    # print('-------------------------------------------------')
+    # tempConfig = Configuration()
+    # print(tempConfig.get_configuration())

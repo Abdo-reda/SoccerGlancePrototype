@@ -1,4 +1,5 @@
 {
     "editor.defaultFormatter": null,
-    "editor.formatOnSave": true
+    "editor.formatOnSave": false,
+    "explorer.sortOrder": "type"
 }
