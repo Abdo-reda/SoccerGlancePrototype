@@ -3,14 +3,16 @@ import logging
 #from feature_extractor import buildFeatureExtractor, buildPCAReducer
 import sys
 import time
+import shutil 
 sys.path.append('/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype')
 from configuration import Configuration
-from feature_extraction.feature_extractor import buildFeatureExtractor
+from feature_generation.feature_extractor import buildFeatureExtractor
 
 
 FEATURE_EXTRACTOR = None
 OUTPUT_PATH = None
 CHUNK_SIZE = 5.0
+TEMP_PROCESSED_PATH = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/proccessed_chunks/'
 
 def process_input(feature_configuration):
     video_path = feature_configuration['input_path']
@@ -20,10 +22,11 @@ def process_input(feature_configuration):
         added = [file for file in files if file.endswith('.mp4')]
         for file in added:
             input_path = video_path + file
+            moved_path = TEMP_PROCESSED_PATH + file
             time.sleep(3) # wait for the file to be fully copied to the input folder
             generate_features(input_path, chunk_num)
             chunk_num += 1
-            os.remove(input_path)
+            shutil.move(input_path, moved_path)
 
 
 def generate_features(input_path, chunk_num):

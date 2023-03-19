@@ -30,8 +30,8 @@ class Configuration:
             },
             'feature_configuration': {
                 'features_type': 'BAIDU',   #
-                'input_path': default_path + '/chunk_generator/generated_chunks/video_chunks/',
-                'output_path': default_path + '/feature_extraction/generated_features/',
+                'input_path': default_path + '/chunk_generation/generated_chunks/video_chunks/',
+                'output_path': default_path + '/feature_generation/generated_features/',
                 'overwrite': True,
                 'video_res': 'LQ',
                 'back_end': 'TF2',
@@ -39,10 +39,10 @@ class Configuration:
                 'grabber': 'opencv',
                 'framerate': framerate,  # needs to be float
                 'feature_reducer_type': 'PCA',
-                'feature_reducer_path': default_path + '/feature_extraction/pca_512_TF2.pkl',
+                'feature_reducer_path': default_path + '/feature_generation/pca_512_TF2.pkl',
             },
             'inference_configuration': {
-                'input_path': default_path + '/feature_extraction/generated_features/',
+                'input_path': default_path + '/feature_generation/generated_features/',
                 'output_path': default_path + '/output_generation/generated_output/',
                 'window_size_frame': window_size * int(framerate),
                 'framerate': framerate,

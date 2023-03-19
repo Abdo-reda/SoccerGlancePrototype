@@ -20,7 +20,7 @@ def process_input(inference_configuration):
         added = [file for file in files if file.endswith('.npy')]
         for file in added:
             input_path = video_path + file
-            time.sleep(1) # wait for the file to be fully copied to the input folder
+            time.sleep(1) # wait for the file to be fully copied to the input folder # !!!!!!!!!!! I think a better solution is to check if the next chunk started generating or not, or maybe call back functions or async stuff ...
             generate_output(input_path, chunk_num, inference_configuration)
             chunk_num+= 1
             os.remove(input_path)

@@ -1,12 +1,12 @@
 feature_configuration:
   back_end: TF2
-  feature_reducer_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_extraction/pca_512_TF2.pkl
+  feature_reducer_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_generation/pca_512_TF2.pkl
   feature_reducer_type: PCA
   features_type: BAIDU
   framerate: 2.0
   grabber: opencv
-  input_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generator/generated_chunks/video_chunks/
-  output_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_extraction/generated_features/
+  input_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/video_chunks/
+  output_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_generation/generated_features/
   overwrite: true
   transform: crop
   video_res: LQ
@@ -14,7 +14,7 @@ inference_configuration:
   NMS_threshold: 0.6
   NMS_window: 30
   framerate: 2.0
-  input_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_extraction/generated_features/
+  input_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_generation/generated_features/
   num_classes: 17
   output_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/output_generation/generated_output/
   version: 2

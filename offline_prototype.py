@@ -4,8 +4,8 @@ import logging
 from datetime import datetime
 from parameters import *
 from build_models.inference import invokeInference, buildModel
-from feature_extraction.feature_extractor import invokeExtraction
-from feature_extraction.ConvertHQtoLQ import convert_video
+from feature_generation.feature_extractor import invokeExtraction
+from feature_generation.ConvertHQtoLQ import convert_video
 from configuration import Configuration
 
 

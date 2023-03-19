@@ -6,5 +6,23 @@
   <body>
     <h1>RTMP Stream Processing</h1>
     <img src="{{ url_for('view_feed') }}" width="1080" height="720" />
+   
+    <div>
+      <button id="processBtn" onclick="location.href='/process_stream'">Process Stream</button>
+    </div>
+  
   </body>
+  <script>
+    // document.getElementById("processBtn").addEventListener("click", function(event){
+    //     console.log("Button clicked");
+    //     var xhr = new XMLHttpRequest();
+    //     xhr.open("GET", "/process_stream");
+    //     xhr.onreadystatechange = function() {
+    //         if (xhr.readyState === 4 && xhr.status === 200) {
+    //             console.log("Response received");
+    //         }
+    //     };
+    //     xhr.send();
+    // });
+  </script>
 </html>

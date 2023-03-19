@@ -47,7 +47,7 @@ def buildModel(model_configuration):
 
     # --------------Loads the model // For the best model only
     checkpoint = torch.load(os.path.join(
-        "build_models/models", model_configuration['model_name'], "model.pth.tar"))
+        "/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/build_models/models", model_configuration['model_name'], "model.pth.tar"))
     model.load_state_dict(checkpoint['state_dict'])
 
     return model
@@ -139,7 +139,7 @@ def invokeInference(
                 frame_index = int(spot[0])
                 confidence = spot[1]
                 # confidence = predictions_half_1[frame_index,
-                seconds = int((frame_index//framerate) % 60) + chunk_num*chunk_size
+                seconds = int((frame_index//framerate) % 60) #int((frame_index//framerate) % 60) + chunk_num*chunk_size
                 #minutes = int((frame_index//framerate)//60)
                 prediction_data = dict()
                 prediction_data["gameTime"] = str(
@@ -155,8 +155,9 @@ def invokeInference(
                 json_data["predictions"].append(prediction_data)
 
     with open(os.path.join(output_folder, "results_spotting.json"), 'a+') as output_file:
+        output_file.write(f'\n//---------------------------- NEW CHUNK {chunk_num} ------------------------------\n')
         json.dump(json_data, output_file, indent=4)
-        output_file.write('\n//---------------------------- NEW CHUNK ------------------------------\n')
+        
 
     return
 

@@ -1,22 +1,20 @@
 from flask import Flask, render_template, Response
 import cv2
+import subprocess
+import signal
 
 app = Flask(__name__)
 source = "rtmp://localhost:1935/live/mystream"
 STREAM = None
 
-def handle_stream(stream):
-    # Do something with the stream
-    print(f"Received stream from {stream.client_id}")
-
 
 @app.route('/')
 def index():
     """Render the HTML template with the video player."""
-    global STREAM
-    if STREAM is None or not STREAM.isOpened():
-        STREAM = cv2.VideoCapture(source)
-        print('Warning: unable to open video source: ', source)
+    # global STREAM
+    # if STREAM is None or not STREAM.isOpened():
+    #     STREAM = cv2.VideoCapture(source)
+    #     print('Warning: unable to open video source: ', source)
     return render_template('index.html')
 
 def gen():
@@ -42,16 +40,16 @@ def view_feed():
     if STREAM is None or not STREAM.isOpened():
         return Response(status=204)
     else :
-        return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(status=204) #Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
       
+    
+@app.route('/process_stream')
+def process_stream():
+    process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])  
+    return render_template('processing.html')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port=5000, debug=True) #app.run(host='0.0.0.0', port=5000, debug=True) #10.7.57.90
-    
 
-# from rtmplite3.rtmp import FlashServer
-# from rtmplite3 import multitask
-#  rtmpServer = FlashServer()   # a new RTMP server instance
-#     rtmpServer.root = 'flvs/'    # set the document root to be 'flvs' directory. Default is current './' directory.
-#     rtmpServer.start()           # start the server
-#     multitask.run()         # this is needed somewhere in the application to actually start the co-operative multitasking.
+    

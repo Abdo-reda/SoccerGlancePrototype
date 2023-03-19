@@ -12,18 +12,18 @@ PROCESSING = True
 
 def create_folders(dir_path):
     # create the output folders if they don't exist
-    if not os.path.exists(dir_path + '/chunk_generator/input_stream'):
-        os.makedirs(dir_path + '/chunk_generator/input_stream')
-    if not os.path.exists(dir_path + '/chunk_generator/generated_chunks'):
-        os.makedirs(dir_path + '/chunk_generator/generated_chunks')
-    if not os.path.exists(dir_path + '/chunk_generator/generated_chunks/video_chunks'):
-        os.makedirs(dir_path + '/chunk_generator/generated_chunks/video_chunks')
-    if not os.path.exists(dir_path + '/chunk_generator/generated_chunks/audio_chunks'):
-        os.makedirs(dir_path + '/chunk_generator/generated_chunks/audio_chunks')
-    if not os.path.exists(dir_path + '/chunk_generator/generated_chunks/transcript_chunks'):
-        os.makedirs(dir_path + '/chunk_generator/generated_chunks/transcript_chunks')
-    if not os.path.exists(dir_path + '/feature_extraction/generated_features'):
-        os.makedirs(dir_path + '/feature_extraction/generated_features')
+    if not os.path.exists(dir_path + '/chunk_generation/input_stream'):
+        os.makedirs(dir_path + '/chunk_generation/input_stream')
+    if not os.path.exists(dir_path + '/chunk_generation/generated_chunks'):
+        os.makedirs(dir_path + '/chunk_generation/generated_chunks')
+    if not os.path.exists(dir_path + '/chunk_generation/generated_chunks/video_chunks'):
+        os.makedirs(dir_path + '/chunk_generation/generated_chunks/video_chunks')
+    if not os.path.exists(dir_path + '/chunk_generation/generated_chunks/audio_chunks'):
+        os.makedirs(dir_path + '/chunk_generation/generated_chunks/audio_chunks')
+    if not os.path.exists(dir_path + '/chunk_generation/generated_chunks/transcript_chunks'):
+        os.makedirs(dir_path + '/chunk_generation/generated_chunks/transcript_chunks')
+    if not os.path.exists(dir_path + '/feature_generation/generated_features'):
+        os.makedirs(dir_path + '/feature_generation/generated_features')
     if not os.path.exists(dir_path + '/output_generation/generated_output'):
         os.makedirs(dir_path + '/output_generation/generated_output')
 
@@ -39,17 +39,17 @@ def main(args):
     create_folders(dir_path)
 
     # ---------------- Initilize the processes
-    process_capture_stream = subprocess.Popen(['python', dir_path + '/chunk_generator/capture_stream.py'])
-    process_generate_chunks = subprocess.Popen(['python', dir_path + '/chunk_generator/generate_chunks.py'])
-    #process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generator/transcribe_audio.py']) #rename to generate_transcription
-    process_generate_features = subprocess.Popen(['python', dir_path + '/feature_extraction/generate_features.py'])
+    #process_capture_stream = subprocess.Popen(['python', dir_path + '/chunk_generation/capture_stream.py'])
+    process_generate_chunks = subprocess.Popen(['python', dir_path + '/chunk_generation/generate_chunks_v2.py'])
+    #process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generation/transcribe_audio.py']) #rename to generate_transcription
+    process_generate_features = subprocess.Popen(['python', dir_path + '/feature_generation/generate_features.py'])
     process_generate_output = subprocess.Popen(['python', dir_path + '/output_generation/generate_output.py'])
 
     # --------------- Process Chunks and Generate Output
 
     # --------------- Handling Program Exit
     def handling_program_exit(signal_number, frame):
-        process_capture_stream.terminate()
+        #process_capture_stream.terminate()
         process_generate_chunks.terminate()
         #process_transcribe_audio.terminate()
         process_generate_features.terminate()
@@ -90,5 +90,8 @@ if __name__ == "__main__":
     # # ----Sets up the values for some environment variables, not sure if they are used but they could be important ..
     # os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     # os.environ["CUDA_VISIBLE_DEVICES"] = str(0)
-
+    
     main(args)
+
+
+
