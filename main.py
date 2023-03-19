@@ -41,7 +41,7 @@ def main(args):
     # ---------------- Initilize the processes
     process_capture_stream = subprocess.Popen(['python', dir_path + '/chunk_generator/capture_stream.py'])
     process_generate_chunks = subprocess.Popen(['python', dir_path + '/chunk_generator/generate_chunks.py'])
-    process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generator/transcribe_audio.py']) #rename to generate_transcription
+    #process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generator/transcribe_audio.py']) #rename to generate_transcription
     process_generate_features = subprocess.Popen(['python', dir_path + '/feature_extraction/generate_features.py'])
     process_generate_output = subprocess.Popen(['python', dir_path + '/output_generation/generate_output.py'])
 
@@ -51,7 +51,7 @@ def main(args):
     def handling_program_exit(signal_number, frame):
         process_capture_stream.terminate()
         process_generate_chunks.terminate()
-        process_transcribe_audio.terminate()
+        #process_transcribe_audio.terminate()
         process_generate_features.terminate()
         process_generate_output.terminate()
         global PROCESSING

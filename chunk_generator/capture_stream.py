@@ -90,7 +90,7 @@ def initialize():
     dir_path = os.path.dirname(os.path.realpath(__file__))
     # files are format ts, open cv can view them
     temp_file = dir_path + '/temp/temp.ts'
-    videoURL = 'https://youtu.be/o0UXUY1NNqg'  # test stream
+    videoURL = 'https://youtu.be/sZaW4VzS1Vs'  # test stream
     dl_stream(dir_path, videoURL, temp_file)
 
 

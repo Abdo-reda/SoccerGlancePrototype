@@ -9,3 +9,35 @@ TODO:
 
 * create folder run_[data/time]
     //this folder will contain a log file and an outputfile
+
+
+-------- RTMP server Notes 
+[https://www.digitalocean.com/community/tutorials/how-to-set-up-a-video-streaming-server-using-nginx-rtmp-on-ubuntu-20-04] 
+[https://www.digitalocean.com/community/tutorials/how-to-install-nginx-on-ubuntu-20-04]
+[https://serverspace.io/support/help/osnovnye-komandy-ufw]
+
+I have decided to use nginx rtmp module, hopefully this works out.
+    - I installed (sudo apt install) [https://gist.github.com/amitkhare/55155f9ae97013c45eff84eef84ab244]
+         - nginx
+        - libnginx-mod-rtmp -y
+       
+
+Also here are some commands: 
+    - systemctl status nginx //gets status of server I think
+    - sudo systemctl restart nginx //restarts server 
+    - sudo systemctl reload nginx.service
+    - sudo ufw app list
+    - sudo ufw status
+    - sudo ufw allow 1935/tcp
+    - sudo ufw allow 'Nginx HTTP' //or FULL
+    - xdg-open /etc/nginx //this the folder that contains nginx.config file ..
+
+Other Commands:
+    - xdg-open . //opens the current folder in file explorer isa 
+    - sudo -i nautilus //opens root gui file explorer
+    - sudo /usr/local/nginx/sbin/nginx -s stop
+    - sudo /usr/local/nginx/sbin/nginx
+    - sudo netstat -tanpl|grep nginx
+
+Testing:
+ffmpeg -re -i /home/g05-f22/Downloads/MatchTest.mkv -c:v libx264 -preset veryfast -tune zerolatency -c:a aac -f flv rtmp://localhost:1935/live/mystream

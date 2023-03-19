@@ -6,6 +6,7 @@ from parameters import *
 from build_models.inference import invokeInference, buildModel
 from feature_extraction.feature_extractor import invokeExtraction
 from feature_extraction.ConvertHQtoLQ import convert_video
+from configuration import Configuration
 
 
 def main(args):
@@ -13,6 +14,11 @@ def main(args):
     # ------ Setup of Logging & Time Stuff
     print(":)")
     start = time.time()
+    myConfiguration = Configuration()
+    args = myConfiguration.get_configuration()
+    inference_configuration = args['Inference_configuration']
+    model_configuration = args['model_configuration']
+
 
     # 1---- Convert from a HQ resolution to LQ ... is this needed ? ...
     '''
@@ -23,14 +29,7 @@ def main(args):
     '''
     # 2------- Build Model
     model = buildModel(
-        weights=args.load_weights,
-        input_size=args.feature_dim,
-        num_classes=args.num_classes,
-        window_size=args.window_size,
-        vocab_size=args.vocab_size,
-        framerate=int(args.framerate),
-        pool=args.pool,
-        model_name=args.model_name
+        model_configuration
     )
 
     # 3------- Extract features
@@ -54,16 +53,17 @@ def main(args):
     logging.info(
         '------------------Start Step3: Running Model & Getting output ........')
     invokeInference(
-        model=model,
-        input_features=args.input_features,
-        window_size_frame=args.window_size_frame,
-        framerate=int(args.framerate),
-        num_classes=args.num_classes,
-        NMS_window=args.NMS_window,
-        NMS_threshold=args.NMS_threshold,
-        version=args.version,
-        model_name=args.model_name,
-        output_folder=args.output_folder
+        model=model, 
+        input_features=inference_configuration['input_path'],
+        window_size_frame=inference_configuration['window_size_frame'],
+        framerate=inference_configuration['framerate'],
+        num_classes=inference_configuration['num_classes'],
+        NMS_window=inference_configuration['NMS_window'],
+        NMS_threshold=inference_configuration['NMS_threshold'],
+        version=inference_configuration['version'],
+        output_folder=inference_configuration['output_path'],
+        chunk_num = chunk_num,
+        chunk_size = chunk_size,
     )
     step3 = time.time()
     logging.info(f'-----------------Time for Step3: {step3 - step2} seconds')

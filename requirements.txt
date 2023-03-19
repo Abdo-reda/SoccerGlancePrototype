@@ -10,4 +10,6 @@ ffmpy
 m3u8
 streamlink
 pyyaml
+# flask 
+# flask-script 
 git+https://github.com/openai/whisper.git
