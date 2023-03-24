@@ -23,7 +23,7 @@ def process_input(feature_configuration):
         for file in added:
             input_path = video_path + file
             moved_path = TEMP_PROCESSED_PATH + file
-            time.sleep(3) # wait for the file to be fully copied to the input folder
+            time.sleep(5) # wait for the file to be fully copied to the input folder
             generate_features(input_path, chunk_num)
             chunk_num += 1
             shutil.move(input_path, moved_path)

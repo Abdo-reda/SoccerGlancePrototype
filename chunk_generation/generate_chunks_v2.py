@@ -7,7 +7,7 @@ source = "rtmp://localhost:1935/live/mystream"
 
 def generate_chunks(dir_path, stream):
     frame_count = 0
-    fps = stream.get(cv2.CAP_PROP_FPS) # 25 # get the frames per second of the stream
+    fps =  stream.get(cv2.CAP_PROP_FPS) # 25 # get the frames per second of the stream
     chunk_size = int(fps * 5)  # set the chunk size to 5 seconds worth of frames
     frame_list = []
     chunk_num = 0
