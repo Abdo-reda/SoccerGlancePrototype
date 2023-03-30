@@ -2,15 +2,20 @@ from moviepy.editor import *
 import os
 import time
 import cv2
+import subprocess
 
 source = "rtmp://localhost:1935/live/mystream"
+chunk_duration = 90
+temp_output_path = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/audio_chunks'
 
 def generate_chunks(dir_path, stream):
     frame_count = 0
     fps =  stream.get(cv2.CAP_PROP_FPS) # 25 # get the frames per second of the stream
-    chunk_size = int(fps * 5)  # set the chunk size to 5 seconds worth of frames
+    chunk_size = int(fps * chunk_duration)  # set the chunk size to chunk_duration seconds worth of frames
     frame_list = []
     chunk_num = 0
+
+    
 
     while True:
         ret, frame = stream.read()
@@ -59,6 +64,8 @@ def initialize():
     generate_chunks(dir_path, stream)
 
 if __name__ == "__main__":
-    initialize()
+    generate_audio = subprocess.Popen('ffmpeg -i ' + source + ' -f segment -segment_time ' + chunk_duration + ' -codec:a pcm_s16le -ar 44100 -ac 2 ' + temp_output_path + '/output_%03d.wav')
+    
 
-
+#ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 30 -codec:a pcm_s16le -ar 44100 -ac 2 output_%03d.wav
+#'ffmpeg -t ' + chunk_duration + ' -i ' + source +' -c copy /generated_chunks/audio_chunks/output.mp3'

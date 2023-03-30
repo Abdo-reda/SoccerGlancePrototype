@@ -8,7 +8,9 @@ from parameters import *
 from configuration import Configuration
 
 PROCESSING = True
-
+SOURCE = "rtmp://localhost:1935/live/mystream"
+CHUNK_DUR = 30
+TEMP_AUDIO_OUTPUT_PATH = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/audio_chunks'
 
 def create_folders(dir_path):
     # create the output folders if they don't exist
@@ -40,27 +42,36 @@ def main(args):
 
     # ---------------- Initilize the processes
     #process_capture_stream = subprocess.Popen(['python', dir_path + '/chunk_generation/capture_stream.py'])
-    process_generate_chunks = subprocess.Popen(['python', dir_path + '/chunk_generation/generate_chunks_v2.py'])
-    #process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generation/transcribe_audio.py']) #rename to generate_transcription
-    process_generate_features = subprocess.Popen(['python', dir_path + '/feature_generation/generate_features.py'])
-    process_generate_output = subprocess.Popen(['python', dir_path + '/output_generation/generate_output.py'])
+    #process_generate_chunks = subprocess.Popen(['python', dir_path + '/chunk_generation/generate_chunks_v2.py'])
+    #
+    process_generate_audio_chunks = subprocess.Popen(['ffmpeg','-i', SOURCE, '-f', 'segment', '-segment_time', str(CHUNK_DUR), '-codec:a', 'pcm_s16le', '-ar', '44100' , '-ac', '2', TEMP_AUDIO_OUTPUT_PATH + '/output_%03d.wav'])
+    
+
+    process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generation/transcribe_audio.py', str(process_generate_audio_chunks.pid)]) #rename to generate_transcription
+    process_extract_highlights = subprocess.Popen(['python', dir_path + '/chunk_generation/extract_highlights.py']) 
+    #process_generate_features = subprocess.Popen(['python', dir_path + '/feature_generation/generate_features.py'])
+    #process_generate_output = subprocess.Popen(['python', dir_path + '/output_generation/generate_output.py'])
+    
+    
+
+
 
     # --------------- Process Chunks and Generate Output
 
     # --------------- Handling Program Exit
     def handling_program_exit(signal_number, frame):
         #process_capture_stream.terminate()
-        process_generate_chunks.terminate()
-        #process_transcribe_audio.terminate()
-        process_generate_features.terminate()
-        process_generate_output.terminate()
+        process_generate_audio_chunks.terminate()
+        process_transcribe_audio.terminate()
+        process_extract_highlights.terminate()
+        #process_generate_features.terminate()
+        #process_generate_output.terminate()
         global PROCESSING
         PROCESSING = False
         print('\n-------exiting------\n')
 
     signal.signal(signal.SIGINT, handling_program_exit)
     while PROCESSING:
-        # ....processing
         pass
 
 

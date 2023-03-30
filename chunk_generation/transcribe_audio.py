@@ -1,21 +1,24 @@
 import whisper
 import time
 import os
+import sys
+import psutil
 
 
-def process_input():
+def process_input(pid):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     allFiles = []  #check for a new audio file
     print('Waiting for audio files...')
     label = False
     counter=1
+    process_handle = psutil.Process(pid)
     while True:
         files = os.listdir(dir_path + '/generated_chunks/audio_chunks')
 
-        # add all new files and endswith .mp3
-        added = [f for f in files if f not in allFiles and f.endswith('.mp3')]
-        # update allFiles with only the files that end with .mp3
-        allFiles = [f for f in files if f.endswith('.mp3')]
+        # add all new files and endswith .wav
+        added = [f for f in files if f not in allFiles and f.endswith('.wav')]
+        # update allFiles with only the files that end with .wav
+        allFiles = [f for f in files if f.endswith('.wav')]
 
         if not added:
             if label:
@@ -23,14 +26,31 @@ def process_input():
             label = False
             time.sleep(1)
         else:
+            
+            open_file = process_handle.open_files()[0][0]
+            
+            
+             
             label = True
             for file in added:
+                
+                
                 audio_file= file
                 print('Audio file found: ' + audio_file)
                 audio_path = dir_path + '/generated_chunks/audio_chunks/' + audio_file
-                model = whisper.load_model("base") # might change to another model for better accuracy
-                time.sleep(3)
-                result = model.transcribe(audio_path, fp16=False, language='English') #transcribe audio and save to result
+                while audio_path == open_file:
+                    print("Audio Path: ", audio_path)
+                    print("Open File: ", open_file )
+                    
+                    if process_handle.open_files() != []:
+                        open_file = process_handle.open_files()[0][0]
+
+                
+                    pass
+                
+                model = whisper.load_model("medium") # might change to another model for better accuracy
+                time.sleep(1)
+                result = model.transcribe(audio_path, fp16=False) #transcribe audio and save to result
                 if counter < 10:
                     file= open(dir_path + '/generated_chunks/transcript_chunks/transcript_chunk0' + str(counter) + '.txt', 'w')
                 else:
@@ -38,10 +58,11 @@ def process_input():
                 file.write(result["text"])  #create a text file for each transcription and save in transcript_chunks folder
                 file.close()
                 counter+=1
-                os.remove(audio_path) #delete audio file after transcription
+                # os.remove(audio_path) #delete audio file after transcription
 
 def initialize():
-    process_input()
+    pid = int(sys.argv[1])
+    process_input(pid)
 
 if __name__ == "__main__":
     initialize()
