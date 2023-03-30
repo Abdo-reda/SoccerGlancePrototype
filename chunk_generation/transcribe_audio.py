@@ -12,6 +12,7 @@ def process_input(pid):
     label = False
     counter=1
     process_handle = psutil.Process(pid)
+    
     while True:
         files = os.listdir(dir_path + '/generated_chunks/audio_chunks')
 
@@ -19,6 +20,7 @@ def process_input(pid):
         added = [f for f in files if f not in allFiles and f.endswith('.wav')]
         # update allFiles with only the files that end with .wav
         allFiles = [f for f in files if f.endswith('.wav')]
+      
 
         if not added:
             if label:
@@ -27,25 +29,26 @@ def process_input(pid):
             time.sleep(1)
         else:
             
-            open_file = process_handle.open_files()[0][0]
             
-            
-             
             label = True
             for file in added:
                 
-                
+                is_file_use = True
                 audio_file= file
                 print('Audio file found: ' + audio_file)
                 audio_path = dir_path + '/generated_chunks/audio_chunks/' + audio_file
-                while audio_path == open_file:
-                    print("Audio Path: ", audio_path)
-                    print("Open File: ", open_file )
-                    
-                    if process_handle.open_files() != []:
-                        open_file = process_handle.open_files()[0][0]
-
                 
+                while is_file_use:
+                    # print("Audio Path: ", audio_path)
+                    # print("Open File: ", open_file )
+                        
+                    file_handles = process_handle.open_files()
+                    for fh in file_handles:
+                        if(audio_path == fh.path):
+                            is_file_use = True 
+                            break
+                        is_file_use = False
+
                     pass
                 
                 model = whisper.load_model("medium") # might change to another model for better accuracy
