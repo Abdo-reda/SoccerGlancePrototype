@@ -5,12 +5,15 @@ import sys
 import psutil
 
 
+
+
 def process_input(pid):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     allFiles = []  #check for a new audio file
     print('Waiting for audio files...')
     label = False
-    counter=1
+    CHUNK_NUM=0
+    CHUNK_DUR=30
     process_handle = psutil.Process(pid)
     
     while True:
@@ -54,13 +57,13 @@ def process_input(pid):
                 model = whisper.load_model("medium") # might change to another model for better accuracy
                 time.sleep(1)
                 result = model.transcribe(audio_path, fp16=False) #transcribe audio and save to result
-                if counter < 10:
-                    file= open(dir_path + '/generated_chunks/transcript_chunks/transcript_chunk0' + str(counter) + '.txt', 'w')
+                if CHUNK_NUM < 10:
+                    file= open(dir_path + '/generated_chunks/transcript_chunks/transcript_chunk0' + str(CHUNK_NUM) + '.txt', 'w')
                 else:
-                    file= open(dir_path + '/generated_chunks/transcript_chunks/transcript_chunk' + str(counter) + '.txt', 'w')
+                    file= open(dir_path + '/generated_chunks/transcript_chunks/transcript_chunk' + str(CHUNK_NUM) + '.txt', 'w')
                 file.write(result["text"])  #create a text file for each transcription and save in transcript_chunks folder
                 file.close()
-                counter+=1
+                CHUNK_NUM+=1
                 # os.remove(audio_path) #delete audio file after transcription
 
 def initialize():

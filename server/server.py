@@ -1,20 +1,17 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request, jsonify
 import cv2
 import subprocess
 import signal
 
 app = Flask(__name__)
 source = "rtmp://localhost:1935/live/mystream"
-STREAM = None
+STREAM = cv2.VideoCapture(source)
+HIGHLIGHTS = []
 
 
 @app.route('/')
 def index():
     """Render the HTML template with the video player."""
-    # global STREAM
-    # if STREAM is None or not STREAM.isOpened():
-    #     STREAM = cv2.VideoCapture(source)
-    #     print('Warning: unable to open video source: ', source)
     return render_template('index.html')
 
 def gen():
@@ -27,21 +24,28 @@ def gen():
             # Encode the processed frame as JPEG and yield it
             ret, jpeg = cv2.imencode('.jpg', frame)
             frame = jpeg.tobytes()
-            yield (b'--frame\r\n'
-                   b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
+            yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
         else:
             break
-
 
 @app.route('/view_feed')
 def view_feed():
     """Return stream"""
-    global STREAM
-    if STREAM is None or not STREAM.isOpened():
-        return Response(status=204)
-    else :
-        return Response(status=204) #Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
       
+@app.route('/recieve_higlight', methods=['POST'])
+def recieve_higlight():
+    json_data = request.get_json()
+    HIGHLIGHTS.append(json_data)
+    return 'JSON received!'
+
+        
+@app.route('/get_highlight', methods=['GET'])
+def get_highlight():
+    print('-----------',str(HIGHLIGHTS[0]))
+    return (jsonify(HIGHLIGHTS[0]))
+
+
     
 @app.route('/process_stream')
 def process_stream():

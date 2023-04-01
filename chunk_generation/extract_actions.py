@@ -8,7 +8,8 @@ model_engine = "text-davinci-003"
 dir_path = os.path.dirname(os.path.realpath(__file__))
 allFiles = []  #check for a new audio file
 label = False
-counter=1
+CHUNK_NUM=0
+CHUNK_DUR=30
 
 team1 = "England"
 team2 = "Belgium"
@@ -51,12 +52,12 @@ while True:
 
             response = completion.choices[0].text
             time.sleep(1)
-            if counter < 10:
-                file= open(dir_path + '/generated_chunks/highlight_chunks/action0' + str(counter) + '.txt', 'w')
+            if CHUNK_NUM < 10:
+                file= open(dir_path + '/generated_chunks/highlight_chunks/action0' + str(CHUNK_NUM) + '.txt', 'w')
             else:
-                file= open(dir_path + '/generated_chunks/highlight_chunks/action' + str(counter) + '.txt', 'w')
+                file= open(dir_path + '/generated_chunks/highlight_chunks/action' + str(CHUNK_NUM) + '.txt', 'w')
             
-            counter+=1
+            CHUNK_NUM+=1
             
             file.write(response)  #create a text file for each transcription and save in transcript_chunks folder
             file.close()

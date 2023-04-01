@@ -3,6 +3,8 @@
   <head>
     <title>RTMP Stream Processing</title>
   </head>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
   <body>
     <h1>RTMP Stream Processing</h1>
     <img src="{{ url_for('view_feed') }}" width="1080" height="720" />
@@ -10,7 +12,14 @@
     <div>
       <button id="processBtn" onclick="location.href='/process_stream'">Process Stream</button>
     </div>
-  
+
+    <div id="json-data"> 
+      <p> Time: <span id="json-minutes"></span>:<span id="json-seconds"></span> </p>
+      <p> Highlights: <span id="json-highlight"> </span>   </p>
+
+    </div>
+
+
   </body>
   <script>
     // document.getElementById("processBtn").addEventListener("click", function(event){
@@ -23,6 +32,32 @@
     //         }
     //     };
     //     xhr.send();
+     //contentType: 'application/json;charset=UTF-8',
     // });
   </script>
+
+  <script>
+      function updateData() {
+        $.ajax({
+            type: 'GET',
+            url: '/get_highlight',
+            dataType: "json",
+            success: function(data) {
+                console.log(data)
+                $('#json-minutes').text(JSON.stringify(data['minutes']));
+                $('#json-seconds').text(JSON.stringify(data['seconds']));
+                $('#json-highlight').text(JSON.stringify(data['highlights']));
+            },
+         
+        });
+      };
+
+      $(document).ready(function() {
+      setInterval(updateData, 10000);
+     });
+    </script>
+
+  
 </html>
+
+
