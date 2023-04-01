@@ -13,12 +13,12 @@
       <button id="processBtn" onclick="location.href='/process_stream'">Process Stream</button>
     </div>
 
-    <div id="json-data"> 
-      <p> Time: <span id="json-minutes"></span>:<span id="json-seconds"></span> </p>
-      <p> Highlights: <span id="json-highlight"> </span>   </p>
-
+    <div id="highlight-list">
+      <div id="json-data" style="display:none;"> 
+        <p> Time: <span id="json-minutes"></span>:<span id="json-seconds"></span> </p>
+        <p> Highlights: <span id="json-highlight"> </span>   </p>
+      </div>
     </div>
-
 
   </body>
   <script>
@@ -43,18 +43,20 @@
             url: '/get_highlight',
             dataType: "json",
             success: function(data) {
-                console.log(data)
-                $('#json-minutes').text(JSON.stringify(data['minutes']));
-                $('#json-seconds').text(JSON.stringify(data['seconds']));
-                $('#json-highlight').text(JSON.stringify(data['highlights']));
+                var clonedDiv = $("#json-data").clone();
+                clonedDiv.find("#json-minutes").text(JSON.stringify(data['minutes']));
+                clonedDiv.find("#json-seconds").text(JSON.stringify(data['seconds']));
+                clonedDiv.find("#json-highlight").text(JSON.stringify(data['highlights']));
+                clonedDiv.removeAttr("style");
+                $("#highlight-list").append(clonedDiv);
             },
          
         });
       };
 
       $(document).ready(function() {
-      setInterval(updateData, 10000);
-     });
+        setInterval(updateData, 30000);
+      });
     </script>
 
   

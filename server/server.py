@@ -6,7 +6,7 @@ import signal
 app = Flask(__name__)
 source = "rtmp://localhost:1935/live/mystream"
 STREAM = cv2.VideoCapture(source)
-HIGHLIGHTS = []
+HIGHLIGHT = None
 
 
 @app.route('/')
@@ -36,14 +36,14 @@ def view_feed():
 @app.route('/recieve_higlight', methods=['POST'])
 def recieve_higlight():
     json_data = request.get_json()
-    HIGHLIGHTS.append(json_data)
+    global HIGHLIGHT
+    HIGHLIGHT = json_data
     return 'JSON received!'
 
         
 @app.route('/get_highlight', methods=['GET'])
 def get_highlight():
-    print('-----------',str(HIGHLIGHTS[0]))
-    return (jsonify(HIGHLIGHTS[0]))
+    return (jsonify(HIGHLIGHT))
 
 
     
