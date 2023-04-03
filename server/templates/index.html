@@ -156,10 +156,19 @@
 
   document.getElementById("processBtn").addEventListener("click", function (event) {
     startTime = Date.now() - elapsedTime;
+    
     timerInterval = setInterval(function printTime() {
       elapsedTime = Date.now() - startTime;
       $("#counter").text(timeToString(elapsedTime))
     }, 10);
+
+    $.ajax({
+      type: 'GET',
+      url: '/process_stream',
+      dataType: "json",
+      success: function (data) {
+      },
+    });
 
   });
 </script>
