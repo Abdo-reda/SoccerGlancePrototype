@@ -43,16 +43,17 @@ def main(args):
     # ---------------- Initilize the processes
     #process_capture_stream = subprocess.Popen(['python', dir_path + '/chunk_generation/capture_stream.py'])
     #process_generate_chunks = subprocess.Popen(['python', dir_path + '/chunk_generation/generate_chunks_v2.py'])
-    #
-    process_generate_audio_chunks = subprocess.Popen(['ffmpeg','-i', SOURCE, '-f', 'segment', '-segment_time', str(CHUNK_DUR), '-codec:a', 'pcm_s16le', '-ar', '44100' , '-ac', '2', TEMP_AUDIO_OUTPUT_PATH + '/output_%03d.wav'])
-    process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generation/transcribe_audio.py', str(process_generate_audio_chunks.pid)]) #rename to generate_transcription
+    
+
     #process_extract_audio_actions = subprocess.Popen(['python', dir_path + '/chunk_generation/extract_actions.py']) 
-    process_extract_highlights = subprocess.Popen(['python', dir_path + '/chunk_generation/extract_highlights.py']) 
+
     #process_generate_features = subprocess.Popen(['python', dir_path + '/feature_generation/generate_features.py'])
     #process_generate_output = subprocess.Popen(['python', dir_path + '/output_generation/generate_output.py'])
     
     
-
+    process_generate_audio_chunks = subprocess.Popen(['ffmpeg','-i', SOURCE, '-f', 'segment', '-segment_time', str(CHUNK_DUR), '-codec:a', 'pcm_s16le', '-ar', '44100' , '-ac', '2', TEMP_AUDIO_OUTPUT_PATH + '/output_%03d.wav'])
+    process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generation/transcribe_audio.py', str(process_generate_audio_chunks.pid)]) #rename to generate_transcription
+    process_extract_highlights = subprocess.Popen(['python', dir_path + '/chunk_generation/extract_highlights.py']) 
 
 
     # --------------- Process Chunks and Generate Output

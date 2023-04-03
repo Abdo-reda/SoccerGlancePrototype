@@ -6,7 +6,7 @@ import signal
 app = Flask(__name__)
 source = "rtmp://localhost:1935/live/mystream"
 STREAM = cv2.VideoCapture(source)
-HIGHLIGHT = None
+HIGHLIGHTS = []
 
 
 @app.route('/')
@@ -14,11 +14,12 @@ def index():
     """Render the HTML template with the video player."""
     return render_template('index.html')
 
+
 def gen():
     """Generate the video frames and process them."""
     while True:
         # Get the next video frame from the camera
-        ret, frame = STREAM.read() 
+        ret, frame = STREAM.read()
         # If the frame is valid, process it
         if ret:
             # Encode the processed frame as JPEG and yield it
@@ -28,32 +29,31 @@ def gen():
         else:
             break
 
+
 @app.route('/view_feed')
 def view_feed():
     """Return stream"""
     return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
-      
+
+
 @app.route('/recieve_higlight', methods=['POST'])
 def recieve_higlight():
     json_data = request.get_json()
     global HIGHLIGHT
-    HIGHLIGHT = json_data
+    HIGHLIGHTS.append(json_data)
     return 'JSON received!'
 
-        
+
 @app.route('/get_highlight', methods=['GET'])
 def get_highlight():
-    return (jsonify(HIGHLIGHT))
+    return (jsonify(HIGHLIGHTS))
 
 
-    
 @app.route('/process_stream')
 def process_stream():
-    process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])  
-    return render_template('processing.html')
+    # process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])
+    return 'Processing ...'
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5000, debug=True) #app.run(host='0.0.0.0', port=5000, debug=True) #10.7.57.90
-
-    
+    app.run(host='0.0.0.0', port=5000, debug=True) #10.7.57.90
