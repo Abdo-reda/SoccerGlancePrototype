@@ -29,13 +29,13 @@ class Configuration:
                 'model_name': model_name,   # needs to match the model file name
             },
             'feature_configuration': {
-                'features_type': 'BAIDU',   #
+                'features_type': 'ResNET',   #
                 'input_path': default_path + '/chunk_generation/generated_chunks/video_chunks/',
                 'output_path': default_path + '/feature_generation/generated_features/',
                 'overwrite': True,
                 'video_res': 'LQ',
                 'back_end': 'TF2',
-                'transform': 'crop',
+                'transform': 'resize',
                 'grabber': 'opencv',
                 'framerate': framerate,  # needs to be float
                 'feature_reducer_type': 'PCA',

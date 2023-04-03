@@ -2,13 +2,13 @@ feature_configuration:
   back_end: TF2
   feature_reducer_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_generation/pca_512_TF2.pkl
   feature_reducer_type: PCA
-  features_type: BAIDU
+  features_type: ResNET
   framerate: 2.0
   grabber: opencv
   input_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/video_chunks/
   output_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_generation/generated_features/
   overwrite: true
-  transform: crop
+  transform: resize
   video_res: LQ
 inference_configuration:
   NMS_threshold: 0.4
