@@ -5,7 +5,7 @@ import cv2
 import subprocess
 
 source = "rtmp://localhost:1935/live/mystream"
-chunk_duration = 90
+chunk_duration = 5
 temp_output_path = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/audio_chunks'
 
 def generate_chunks(dir_path, stream):
@@ -15,46 +15,21 @@ def generate_chunks(dir_path, stream):
     frame_list = []
     chunk_num = 0
 
-    
 
     while True:
         ret, frame = stream.read()
-
-        # if frame is read successfully
         if ret:
-            # append the frame to the frame list
             frame_list.append(frame)
             frame_count += 1
-
-            # if we have enough frames for a chunk
             if frame_count >= chunk_size:
-                # concatenate the frames and save as a video file
                 filename = f'chunk{chunk_num}.mp4'
                 out = cv2.VideoWriter(f"/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/video_chunks/{filename}", cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame.shape[1], frame.shape[0]))
                 for frame in frame_list:
                     out.write(frame)
                 out.release()
-
-                # reset the variables
                 chunk_num +=1
                 frame_count = 0
                 frame_list = []
-
-        # ret, frame = stream.read()  # read the next frame from the stream
-        # if not ret:
-        #     break  # exit the loop if there are no more frames
-    
-        # if frame_count % chunk_size == 0:
-        #     # if we've reached the end of a chunk, save the frames to a file
-        #     filename = f'chunk{frame_count//chunk_size}.mp4'  # create a filename for the chunk
-        #     writer = cv2.VideoWriter(dir_path + '/generated_chunks/video_chunks/video_chunk/' + filename, cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame.shape[1], frame.shape[0]))  # create a writer to save the frames as a video file
-        
-        # writer.write(frame)  # write the first frame to the file
-
-        # if frame_count % chunk_size == chunk_size - 1:
-        #     writer.release()
-        
-        # frame_count += 1
 
 
 
@@ -64,8 +39,7 @@ def initialize():
     generate_chunks(dir_path, stream)
 
 if __name__ == "__main__":
-    generate_audio = subprocess.Popen('ffmpeg -i ' + source + ' -f segment -segment_time ' + chunk_duration + ' -codec:a pcm_s16le -ar 44100 -ac 2 ' + temp_output_path + '/output_%03d.wav')
-    
+    initialize()
 
 #ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 30 -codec:a pcm_s16le -ar 44100 -ac 2 output_%03d.wav
 #'ffmpeg -t ' + chunk_duration + ' -i ' + source +' -c copy /generated_chunks/audio_chunks/output.mp3'

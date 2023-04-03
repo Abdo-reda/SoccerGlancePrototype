@@ -4,9 +4,6 @@ import os
 import sys
 import psutil
 
-
-
-
 def process_input(pid):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     allFiles = []  #check for a new audio file
@@ -31,7 +28,6 @@ def process_input(pid):
             label = False
             time.sleep(1)
         else:
-            
             
             label = True
             for file in added:

@@ -45,6 +45,12 @@ ffmpeg -re -i /home/g05-f22/Downloads/MatchTest.mkv -c:v libx264 -preset veryfas
 ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 30 -codec:a pcm_s16le -ar 44100 -ac 2 output_%03d.wav
 ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 2 output_%03d.mp3
 ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 30 -codec:a flac -ar 44100 -ac 2 output_%03d.flac 
+ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 5 -codec:v libx264 -preset faster -crf 22 -pix_fmt yuv420p -an output_%03d.mkv
+ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 5 -codec:v libx264 -preset faster -crf 22 -pix_fmt yuv420p -an -movflags +faststart output_%03d.mp4
+
+//Ultra mode
+ffmpeg -i rtmp://localhost:1935/live/mystream -f tee "[select=a:f=matroska:map=a,split=2][select=a:f=wav:map=0,split=2]" -map 0:v -segment_time 5 -codec:v libx264 -preset ultrafast -crf 22 -pix_fmt yuv420p -map 0:a -segment_time 30 -codec:a pcm_s16le -ar 44100 -ac 2 -f segment "output_mkv_%03d.mkv" -f segment "output_wav_%03d.wav"
+ffmpeg -i rtmp://localhost:1935/live/mystream -f tee "[select=a:f=mkv]output.mkv|[select=a:f=wav]output.wav"
 
 
 -c:a:137 libvorbis 
@@ -53,3 +59,7 @@ ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 30 -codec
 -codec:a libmp3lame -qscale:a 2 
 -codec:a pcm_s16le -acodec copy
 
+--presets: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow
+
+
+conda install -c conda-forge x264

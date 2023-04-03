@@ -16,9 +16,7 @@ body {
 #container>div {
     float: left;
     margin: 64px;
-    border-radius: 10px;
     height: 840px;
-    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.5);
 }
 
 #video-container {
@@ -35,12 +33,16 @@ body {
     overflow-y: auto;
     width: 480px;
     background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4);
 }
 
 #action-list {
     overflow-y: auto;
     width: 480px;
     background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.4);
 }
 
 .title {
