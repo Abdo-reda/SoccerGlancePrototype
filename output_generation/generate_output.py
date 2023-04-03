@@ -24,16 +24,16 @@ def process_input(inference_configuration):
         for file in added:
             input_path = video_path + file
             is_file_use = True
-                
-            while is_file_use:     
-                file_handles = process_handle.open_files()
-                # print('---------------------------------------', file_handles)
-                for fh in file_handles:
-                    if(input_path == fh.path):
-                        is_file_use = True 
-                        break
-                    is_file_use = False
-                pass
+            time.sleep(1)
+            # while is_file_use:     
+            #     file_handles = process_handle.open_files()
+            #     # print('---------------------------------------', file_handles)
+            #     for fh in file_handles:
+            #         if(input_path == fh.path):
+            #             is_file_use = True 
+            #             break
+            #         is_file_use = False
+            #     pass
             
             generate_output(input_path, chunk_num, inference_configuration)
             chunk_num+= 1

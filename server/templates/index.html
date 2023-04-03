@@ -28,7 +28,7 @@
       <div id="highlight-list">
         <p class="title"> Highlights </p>
         <ul id="unordered-highlights">
-          <li id="json-data" style="display:none;">
+          <li id="json-data-highlight" style="display:none;">
             <p class="highlight-text"> <b> Time: </b> <span class="json-minutes"></span>:<span
                 class="json-seconds"></span> <br>
               <b> Highlights: </b> <span class="json-highlight"> </span>
@@ -39,14 +39,15 @@
 
       <div id="action-list">
         <p class="title"> Actions </p>
-        <div id="json-data" style="display:none;">
-          <p class="highlight-text"> <b> Time: </b> <span class="json-minutes"></span>:<span
-              class="json-seconds"></span> <br>
-            <b> Confidence: </b> <span class="json-confidence"></span> <br>
-            <b> Actions: </b> <span class="json-action"> </span>
-          </p>
-        </div>
+        <ul id="unordered-actions">
+          <div id="json-data-action" style="display:none;">
+            <p class="highlight-text"> <b> Time: </b> <span class="json-time"></span> <br>
+              <b> Confidence: </b> <span class="json-confidence"></span> <br>
+              <b> Actions: </b> <span class="json-action"> </span>
+            </p>
+          </div>
       </div>
+      </ul>
     </div>
 
 
@@ -99,7 +100,7 @@
         let numChildren = listElement.children().length;
         let numHighlights = Object.keys(data).length;
         for (let i = numChildren - 1; i < numHighlights; i++) {
-          var clonedHighlight = $("#json-data").clone();
+          var clonedHighlight = $("#json-data-highlight").clone();
           clonedHighlight.find(".json-minutes").text(JSON.stringify(data[i]['minutes']));
           clonedHighlight.find(".json-seconds").text(JSON.stringify(data[i]['seconds']));
           clonedHighlight.find(".json-highlight").text(JSON.stringify(data[i]['highlights']));
@@ -117,24 +118,25 @@
       url: '/get_action',
       dataType: "json",
       success: function (data) {
-        // listElement = $("#unordered-list");
-        // let numChildren = listElement.children().length;
-        // let numHighlights = Object.keys(data).length;
-        // for(let i=numChildren-1; i<numHighlights; i++){
-        //   var clonedHighlight = $("#json-data").clone();
-        //   clonedHighlight.find(".json-minutes").text(JSON.stringify(data[i]['minutes']));
-        //   clonedHighlight.find(".json-seconds").text(JSON.stringify(data[i]['seconds']));
-        //   clonedHighlight.find(".json-highlight").text(JSON.stringify(data[i]['highlights']));
-        //   clonedHighlight.removeAttr("style");
-        //   listElement.append(clonedHighlight);
-        // }
+        listElement = $("#unordered-actions");
+        let numChildren = listElement.children().length;
+        let numHighlights = Object.keys(data).length;
+        for(let i=numChildren-1; i<numHighlights; i++){
+          var clonedAction = $("#json-data-action").clone();
+          clonedAction.find(".json-time").text(JSON.stringify(data[i]['gameTime']));
+          clonedAction.find(".json-confidence").text(JSON.stringify(   ((parseFloat(data[i]['confidence'])*100).toFixed(2) ) + " %").replace(/\"/g, ""));
+          clonedAction.find(".json-action").text(JSON.stringify(data[i]['label']));
+          clonedAction.removeAttr("style");
+          listElement.append(clonedAction);
+        }
       },
 
     });
   };
 
   $(document).ready(function () {
-    setInterval(updateHighlights, 10000);
+    setInterval(updateHighlights, 15000);
+    setInterval(updateActions, 5000);
   });
 
   // document.getElementById("processBtn").addEventListener("click", function(event){
@@ -163,3 +165,4 @@
 </script>
 
 </html>
+

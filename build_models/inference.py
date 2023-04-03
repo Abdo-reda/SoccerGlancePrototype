@@ -7,6 +7,7 @@ from SoccerNet.Evaluation.utils import AverageMeter, EVENT_DICTIONARY_V2, INVERS
 from SoccerNet.Evaluation.utils import EVENT_DICTIONARY_V1, INVERSE_EVENT_DICTIONARY_V1
 import json
 import datetime
+import requests
 
 
 def feats2clip(feats, stride, clip_length, padding="replicate_last", off=0):
@@ -47,7 +48,7 @@ def buildModel(model_configuration):
 
     # --------------Loads the model // For the best model only
     checkpoint = torch.load(os.path.join(
-        "/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/build_models/models", model_configuration['model_name'], "model.pth.tar"))
+        "/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/build_models/models", model_configuration['model_name'], "model.pth.tar")) 
     model.load_state_dict(checkpoint['state_dict'])
 
     return model
@@ -139,8 +140,9 @@ def invokeInference(
                 frame_index = int(spot[0])
                 confidence = spot[1]
                 # confidence = predictions_half_1[frame_index,
-                seconds = int((frame_index//framerate) % 60) #int((frame_index//framerate) % 60) + chunk_num*chunk_size
-                #minutes = int((frame_index//framerate)//60)
+                seconds = int((frame_index//framerate) % 60) + chunk_num*chunk_size
+                minutes = int(seconds/60) # seconds = int((frame_index//framerate) % 60)
+                seconds = seconds % 60
                 prediction_data = dict()
                 prediction_data["gameTime"] = str(
                     half+1) + " - " + str(datetime.timedelta(seconds=seconds))
@@ -153,6 +155,14 @@ def invokeInference(
                 prediction_data["half"] = str(half+1)
                 prediction_data["confidence"] = str(confidence)
                 json_data["predictions"].append(prediction_data)
+
+    #------------------------- send
+  
+    for x in json_data['predictions']:
+        json_obj = json.dumps(x)
+        headers = {'Content-type': 'application/json'}
+        requests.post('http://localhost:5000/recieve_action', data=json_obj, headers=headers)
+    
 
     with open(os.path.join(output_folder, "results_spotting.json"), 'a+') as output_file:
         output_file.write(f'\n//---------------------------- NEW CHUNK {chunk_num} ------------------------------\n')

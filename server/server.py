@@ -7,6 +7,7 @@ app = Flask(__name__)
 source = "rtmp://localhost:1935/live/mystream"
 STREAM = cv2.VideoCapture(source)
 HIGHLIGHTS = []
+ACTION = []
 
 
 @app.route('/')
@@ -44,16 +45,33 @@ def recieve_higlight():
     return 'JSON received!'
 
 
+@app.route('/recieve_action', methods=['POST'])
+def recieve_action():
+    json_data = request.get_json()
+    global ACTION
+    ACTION.append(json_data)
+    return 'JSON received!'
+
+
+
 @app.route('/get_highlight', methods=['GET'])
 def get_highlight():
     return (jsonify(HIGHLIGHTS))
 
 
+@app.route('/get_action', methods=['GET'])
+def get_action():
+    return (jsonify(ACTION))
+
+
 @app.route('/process_stream')
 def process_stream():
-    # process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])
+    print('------------------------------')
+    process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])
     return 'Processing ...'
 
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True) #10.7.57.90
+
+

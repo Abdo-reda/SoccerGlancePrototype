@@ -68,4 +68,8 @@ conda install -c conda-forge x264
 
 export LD_LIBRARY_PATH=/home/g05-f22/miniconda3/envs/MyPrototype/lib/libcudnn.so.8
 
+
+export LD_LIBRARY_PATH=/home/g05-f22/miniconda3/envs/MyPrototype/lib:$LD_LIBRARY_PATH
+
+
 LD_LIBRARY_PATH: /home/g05-f22/miniconda3/envs/MyNewPrototype/lib/python3.9/site-packages/cv2/../../lib64:/home/g05-f22/miniconda3/envs/MyPrototype/lib/libcudnn.so.8
