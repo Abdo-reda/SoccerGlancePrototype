@@ -7,19 +7,18 @@ import requests
 openai.api_key = "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"
 model_engine = "text-davinci-003"
 
+API_URL = "http://10.40.51.75:8000/"
+
 dir_path = os.path.dirname(os.path.realpath(__file__))
 allFiles = []  #check for a new audio file
 label = False
 CHUNK_NUM=0
-CHUNK_DUR=30
+CHUNK_DUR=45
 
 team1 = "Barcelona"
 team2 = "Manchester United"
 prompt_start= "The following is a transcription chunk extracted from the commentary of a soccer match between " + team1 + " and " + team2 + ": "
 prompt_end="If the chunk includes an event that could be considered an important event, describe it to a soccer fan in an engaging way as if you are the commentator. If not, output ‘N/A’."
-
-
-
 
 
 while True:
@@ -65,17 +64,25 @@ while True:
                 "highlights": response.lstrip('\n')
             }
 
-            # Convert the dictionary to a JSON object
+            # -------- Send to API
             json_obj = json.dumps(my_dict)
             headers = {'Content-type': 'application/json'}
-            response = requests.post('http://localhost:5000/recieve_higlight', data=json_obj, headers=headers)
-     
-            # if CHUNK_NUM < 10:
-            #     file= open(dir_path + '/generated_chunks/highlight_chunks/highlight_chunk0' + str(CHUNK_NUM) + '.txt', 'w')
-            # else:
-            #     file= open(dir_path + '/generated_chunks/highlight_chunks/highlight_chunk' + str(CHUNK_NUM) + '.txt', 'w')
-            # file.write(json_obj)  #create a text file for each transcription and save in transcript_chunks folder
-            # file.close()
+            #response = requests.post('http://localhost:5000/recieve_higlight', data=json_obj, headers=headers)
+            response = requests.post(API_URL, headers=headers, json=data)
+
+            if response.status_code == 200:
+                print("Request succeeded!")
+            else:
+                print("Request failed with status code:", response.status_code)
+
+            '''Output to a file
+            if CHUNK_NUM < 10:
+                file= open(dir_path + '/generated_chunks/highlight_chunks/highlight_chunk0' + str(CHUNK_NUM) + '.txt', 'w')
+            else:
+                file= open(dir_path + '/generated_chunks/highlight_chunks/highlight_chunk' + str(CHUNK_NUM) + '.txt', 'w')
+            file.write(json_obj)  #create a text file for each transcription and save in transcript_chunks folder
+            file.close()
+            '''
             
             CHUNK_NUM+=1
 

@@ -2,10 +2,32 @@ TODO:
     * Rename generate_transcrptions
     * Move the folder models inside the build_models
     * Make the folder Tests include logs
+    * Should push processes to a list and then loop over that list and terminate them.
+    * Also, I should look into why I coudn't generate highlights and actions at the same time 
+    * 
+
+------------ API stuff 
+
+### integrating with the API
+
+- The Api is running on http://10.40.51.75:8000
+- Scehdule, when time is satisfied, 
+    //start streaming match
+    //send match is live
+    //either the model server is started or automatically detects there is a stream
+- Model server started
+    //generate chunks
+    //generate transcriptions
+    //generate highlights/summaries from chatGPT or elsewhere
+    //send the highlight
+- Match ends
+    //detect that
+    //send match is finished.
+
+--> how will the user/client gets access to the highlights?
 
 
-
-----
+---- Others
 
 * create folder run_[data/time]
     //this folder will contain a log file and an outputfile
@@ -18,7 +40,7 @@ TODO:
 
 I have decided to use nginx rtmp module, hopefully this works out.
     - I installed (sudo apt install) [https://gist.github.com/amitkhare/55155f9ae97013c45eff84eef84ab244]
-         - nginx
+        - nginx
         - libnginx-mod-rtmp -y
        
 
@@ -39,8 +61,10 @@ Other Commands:
     - sudo /usr/local/nginx/sbin/nginx
     - sudo netstat -tanpl|grep nginx
 
-Testing:
+------------------ Testing:
 ffmpeg -re -i /home/g05-f22/Downloads/MatchTest.mkv -c:v libx264 -preset veryfast -tune zerolatency -c:a aac -f flv rtmp://localhost:1935/live/mystream
+ffmpeg -re -i /home/g05-f22/Downloads/MatchTest.mkv -c:v libx264 -preset veryfast -tune zerolatency -c:a aac -f flv 'rtmp://localhost:1935/live/mystream?fileName=MatchTest.mkv'
+
 
 ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 30 -codec:a pcm_s16le -ar 44100 -ac 2 output_%03d.wav
 ffmpeg -i rtmp://localhost:1935/live/mystream -f segment -segment_time 10 -codec:a libmp3lame -qscale:a 2 output_%03d.mp3
@@ -61,15 +85,77 @@ ffmpeg -i rtmp://localhost:1935/live/mystream -f tee "[select=a:f=mkv]output.mkv
 
 --presets: ultrafast, superfast, veryfast, faster, fast, medium, slow, slower, veryslow
 
-
 conda install -c conda-forge x264
 
 
+------------ NVIDIA stuff
 
 export LD_LIBRARY_PATH=/home/g05-f22/miniconda3/envs/MyPrototype/lib/libcudnn.so.8
-
-
 export LD_LIBRARY_PATH=/home/g05-f22/miniconda3/envs/MyPrototype/lib:$LD_LIBRARY_PATH
-
-
 LD_LIBRARY_PATH: /home/g05-f22/miniconda3/envs/MyNewPrototype/lib/python3.9/site-packages/cv2/../../lib64:/home/g05-f22/miniconda3/envs/MyPrototype/lib/libcudnn.so.8
+
+
+
+
+/home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib
+
+----- Installing TENSOR_RT
+
+Download TensorRT version: [https://developer.nvidia.com/nvidia-tensorrt-8x-download]
+    - GA is stable version, EA stands for early access 
+    - Three methods for Linux:
+        . Debian
+        . RPM 
+        . TAR --> Recommended I think but you will have to manually change and update LD_LIBRARY_PATH 
+
+LD_LIBRARY_PATH: Points to the TensorRT library directory.
+PATH: Points to the TensorRT binary directory.
+PYTHONPATH: Points to the TensorRT Python library directory.
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib //this concatonates the existing paths and adds an additional path .. 
+
+python -m pip install "/home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/python/tensorrt-8.5.3.1-cp39-none-linux_x86_64.whl" --force-reinstall
+python -m pip install /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/uff/uff-0.6.9-py2.py3-none-any.whl
+python -m pip install /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/graphsurgeon/graphsurgeon-0.4.6-py2.py3-none-any.whl
+python -m pip install /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/onnx_graphsurgeon/onnx_graphsurgeon-0.3.12-py2.py3-none-any.whl
+
+
+ln -s /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib/libnvinfer.so.8 /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib/libnvinfer.so.7
+ln -s /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib/libnvinfer_plugin.so.8 /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib/libnvinfer_plugin.so.7
+
+
+
+
+--------- Whisper 
+
+* start and end time for each utterance.
+for result in results:
+    start_time = result["start_time"]
+    end_time = result["end_time"]
+    utterance = result["text"]
+
+//an alternative approach .. https://github.com/linto-ai/whisper-timestamped or https://cloud.google.com/speech-to-text ?! maybe its bad actually, no capiche
+
+
+----------- NGINX RTMP 
+
+
+
+
+---------------------
+
+* Experiment with accuracy:
+    - different ranges 
+    - different matches
+    - //"not_found" a lot <-- keep it in mind, metric in mind.
+    - //merge both approaches <-- 
+
+* Demo:
+    - realtime 
+    - offline 
+      . //no client application ....  
+
+* Slides:
+    . 
+
+* Summarization:

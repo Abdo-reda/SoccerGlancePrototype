@@ -2,10 +2,12 @@ from flask import Flask, render_template, Response, request, jsonify
 import cv2
 import subprocess
 import signal
+from flask_api import status
+import pprint
 
 app = Flask(__name__)
 source = "rtmp://localhost:1935/live/mystream"
-STREAM = cv2.VideoCapture(source)
+STREAM = None #cv2.VideoCapture(source)
 HIGHLIGHTS = []
 ACTION = []
 
@@ -53,7 +55,6 @@ def recieve_action():
     return 'JSON received!'
 
 
-
 @app.route('/get_highlight', methods=['GET'])
 def get_highlight():
     return (jsonify(HIGHLIGHTS))
@@ -70,8 +71,19 @@ def process_stream():
     process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])
     return 'Processing ...'
 
+@app.route('/publish_stream', methods=['POST'])
+def publish_stream():
+    print('--------------- stream is publishing with name', request.form['name'])
+    return 'OK', status.HTTP_200_OK
+
+@app.route('/end_stream', methods=['POST'])
+def end_stream():
+    print('--------------- stream is Done')
+    return 'OK', status.HTTP_200_OK
+
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True) #10.7.57.90
+    app.run(host='0.0.0.0', port=5000, debug=True) 
 
 

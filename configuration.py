@@ -18,6 +18,10 @@ class Configuration:
         num_classes = 17
         model_name = 'NetVLAD++'
         data = {
+            'api_service': {
+                'cookies': '',
+                'match_id': ''
+            },
             'model_configuration': {
                 'weights': None,
                 'feature_dim': 512,  # input_size
@@ -70,6 +74,17 @@ class Configuration:
         # this function will later be used to validate the data returned from the get_configuration ...
         return True
 
+
+# # Load the YAML file
+# with open('your_yaml_file.yaml', 'r') as f:
+#     data = yaml.safe_load(f)
+
+# # Update the match_id field
+# data['api_service']['match_id'] = 'blah'
+
+# # Write the updated data back to the YAML file
+# with open('your_yaml_file.yaml', 'w') as f:
+#     yaml.dump(data, f)
 
 ''' 
     Description of the different parameters, default values, so on .. should be here

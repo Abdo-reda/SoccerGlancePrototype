@@ -10,7 +10,6 @@ def process_input(pid):
     print('Waiting for audio files...')
     label = False
     CHUNK_NUM=0
-    CHUNK_DUR=30
     process_handle = psutil.Process(pid)
     
     while True:

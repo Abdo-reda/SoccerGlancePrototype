@@ -9,7 +9,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 allFiles = []  #check for a new audio file
 label = False
 CHUNK_NUM=0
-CHUNK_DUR=30
+CHUNK_DUR=60
 
 team1 = "England"
 team2 = "Belgium"

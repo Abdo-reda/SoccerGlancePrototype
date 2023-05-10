@@ -142,7 +142,6 @@ def invokeInference(
                 # confidence = predictions_half_1[frame_index,
                 seconds = int((frame_index//framerate) % 60) + chunk_num*chunk_size
                 minutes = int(seconds/60) # seconds = int((frame_index//framerate) % 60)
-                seconds = seconds % 60
                 prediction_data = dict()
                 prediction_data["gameTime"] = str(
                     half+1) + " - " + str(datetime.timedelta(seconds=seconds))
