@@ -7,59 +7,43 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Questrial&family=Squada+One&display=swap');
   </style>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/client.css') }}">
 
 </head>
 
 <body>
 
   <div id="header">
-    <img id="logo" src="{{url_for('static', filename='SoccerGlanceLogo.png')}}" />
-    <h1 class="title_black"> ----------- Model Server ----------- </h1>
+    <h1 class="title_black"> ----------- Client Application ----------- </h1>
   </div>
+
+
 
   <div id="main-body">
     <div id="container">
-      <div id="video-container">
-        <p class="title"> Live Stream </p>
-        <img id="stream" src="{{ url_for('view_feed') }}" width="1280" />
-        <p id="counter"> </p>
-      </div>
-
-      <div id="highlight-list">
-        <p class="title"> Highlights </p>
-        <ul id="unordered-highlights">
-          <li id="json-data-highlight" style="display:none;">
-            <p class="highlight-text"> <b> Time: </b> <span class="json-minutes"></span>:<span
-                class="json-seconds"></span> <br>
+      <div id="background-list">
+        <div id="highlight-list">
+          <p class="title">Match Highlights </p>
+          <div class="highlight-card">
+            <!-- <p class="highlight-text"> <b> Time: </b> <span class="json-minutes"></span>:<span
+              class="json-seconds"></span> <br>
               <b> Highlights: </b> <span class="json-highlight"> </span>
-            </p>
-          </li>
-        </ul>
-      </div>
-
-      <!-- <div id="action-list">
-        <p class="title"> Actions </p>
-        <ul id="unordered-actions">
-          <div id="json-data-action" style="display:none;">
-            <p class="highlight-text"> <b> Time: </b> <span class="json-time"></span> <br>
-              <b> Confidence: </b> <span class="json-confidence"></span> <br>
-              <b> Actions: </b> <span class="json-action"> </span>
+            </p> -->
+            <p class="highlight-text"> <b> Time: 20 </b> <span class="json-minutes"></span>:<span
+              class="json-seconds"></span> <br>
+              <b> Highlights: this is a hgilhightjas;lfkj;aslkfjd;oakjfd;oawjkf;ojadf </b> <span class="json-highlight"> </span>
             </p>
           </div>
-      </div> -->
-      </ul>
+          <!-- <ul id="unordered-highlights">
+             <li id="json-data-highlight" style="display:none;">
+               
+             </li>
+           </ul>  -->
+        </div>
+      </div>
     </div>
-
-
   </div>
 
-
-
-
-  <div id="footer">
-    <button id="processBtn">Process Stream</button>
-  </div>
 
 
 
@@ -68,7 +52,6 @@
 
 
 <script>
-
   let elapsedTime = 0;
 
 
