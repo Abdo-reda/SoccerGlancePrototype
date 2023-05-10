@@ -26,10 +26,7 @@ def index():
     """Render the HTML template with the video player."""
     return render_template('index.html')
 
-@app.route('/client_view')
-def client_view():
-    """Render the HTML template with the video player."""
-    return render_template('client.html')
+
 
 def gen():
     """Generate the video frames and process them."""

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>RTMP Stream Processing</title>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Questrial&family=Squada+One&display=swap');
+  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/client.css') }}">
+
+</head>
+
+<body>
+
+  <div id="header">
+    <p class="subtitle"> An Example of a </p>
+    <h1 class="title_black"> Client Application </h1>
+  </div>
+
+
+
+  <div id="main-body">
+    <div id="container">
+      <div id="background-list">
+        <div id="highlight-list">
+          <p class="title">Match Highlights </p>
+          <div id="unordered-highlights">
+            <div class="highlight-card" >
+            <!--  style="display:none;" -->
+              <p class="highlight-text"> <b> Time: </b> <span class="json-minutes"></span>:<span
+                class="json-seconds"></span> <br>
+                <b> Highlights: </b> <span class="json-highlight"> </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+</body>
+
+
+<script>
+  let elapsedTime = 0;
+
+
+  function timeToString(time) {
+    let diffInHrs = time / 3600000;
+    let hh = Math.floor(diffInHrs);
+
+    let diffInMin = (diffInHrs - hh) * 60;
+    let mm = Math.floor(diffInMin);
+
+    let diffInSec = (diffInMin - mm) * 60;
+    let ss = Math.floor(diffInSec);
+
+    let diffInMs = (diffInSec - ss) * 100;
+    let ms = Math.floor(diffInMs);
+
+    let formattedMM = mm.toString().padStart(2, "0");
+    let formattedSS = ss.toString().padStart(2, "0");
+    let formattedMS = ms.toString().padStart(2, "0");
+
+    return `${formattedMM}:${formattedSS}:${formattedMS}`;
+  }
+
+  function updateHighlights() {
+    $.ajax({
+      type: 'GET',
+      url: '/get_highlight',
+      dataType: "json",
+      success: function (data) {
+        console.log(data);
+        listElement = $("#unordered-highlights");
+        let numChildren = listElement.children().length;
+        let numHighlights = Object.keys(data).length;
+        for (let i = numChildren - 1; i < numHighlights; i++) {
+          let clonedHighlight = $(".highlight-card").clone();
+          clonedHighlight.find(".json-minutes").text(JSON.stringify(data[i]['minutes']));
+          clonedHighlight.find(".json-seconds").text(JSON.stringify(data[i]['seconds']));
+          clonedHighlight.find(".json-highlight").text(JSON.stringify(data[i]['highlights']));
+          clonedHighlight.removeAttr("style");
+          listElement.append(clonedHighlight);
+        }
+      },
+
+    });
+  };
+
+  $(document).ready(function () {
+    //setInterval(updateHighlights, 5000);
+  });
+
+</script>
+
+</html>
+

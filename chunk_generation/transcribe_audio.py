@@ -68,5 +68,5 @@ def initialize():
     process_input(pid)
 
 if __name__ == "__main__":
-    #model = whisper.load_model("large-v2")
-    initialize()
+    model = whisper.load_model("large-v2")
+    #initialize()

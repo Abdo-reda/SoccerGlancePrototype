@@ -39,7 +39,15 @@ body {
 
 #highlight-list {
    margin-top: 50%; 
+   height: 600px;
+   overflow: scroll;
 }
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
 
 #action-list {
     overflow-y: auto;
@@ -52,7 +60,7 @@ body {
 .title {
     color: rgb(18, 138, 229);
     text-align: center;
-    font-size: 36px;
+    font-size: 32px;
     font-family: 'Questrial';
     font-weight: bold;
 }
@@ -63,18 +71,26 @@ body {
     font-size: 48px;
     font-family: 'Questrial';
     font-weight: bold;
-    margin: 40px;
+    margin-bottom: 40px;
+    margin-top: 0px;
+}
+
+.subtitle {
+    color: rgba(28, 42, 56, 1);
+    text-align: center;
+    font-size: 24px;
+    font-family: 'Questrial';
+    margin-bottom: 0px;
 }
 
 .highlight-card{
     word-wrap: break-word;
-    background-color: rgb(164, 208, 242);
-    border-color:rgba(0, 0, 0, 1);
+    background-color: rgb(224, 236, 245); /* rgb(164, 208, 242)*/
     margin-left: 20%;
     margin-right: 20%;
-    padding: 4%;
+    padding: 3%;
     border-radius: 15px;
-    border-width: 10px;
+    border: 2px solid rgb(18, 138, 229);;
 }
 
 
@@ -91,30 +107,14 @@ body {
 }
 
 .highlight-text {
-    color: rgba(28, 42, 56, 1);
-    font-size: 16px;
+    color: rgb(49, 49, 49);
+    font-size: 15 px;
     font-family: 'Questrial';
     margin-right: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
-#processBtn {
-    background-color: white;
-    border-radius: 25px;
-    border-color: rgb(125, 44, 139);
-    ;
-    padding: 14px 22px;
-    text-align: center;
-    font-family: 'Questrial';
-    font-size: 18px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    color: rgba(28, 42, 56, 1);
-}
-
-#processBtn:hover {
-    background-color: rgb(125, 44, 139);
-    color: white;
-}
 
 #footer {
     width: 100%;
@@ -122,8 +122,3 @@ body {
     justify-content: center;
 }
 
-#counter{
-    color: rgba(28, 42, 56, 1);
-    font-size: 18px;
-    font-family: 'Questrial';
-}
