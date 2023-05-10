@@ -12,7 +12,7 @@ source = "rtmp://localhost:1935/live/mystream"
 STREAM = None #cv2.VideoCapture(source)
 HIGHLIGHTS = []
 ACTION = []
-DEFAULT_IMAGE = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/server/static/SoccerGlanceLogo.png'
+DEFAULT_IMAGE = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/server/static/LoadingStream.png'
 IMAGE_BYTES = None
 IS_STREAM = False
 
@@ -40,7 +40,6 @@ def gen():
             IS_STREAM = False
         
         if STREAM is None: 
-            print('------------NONE')
             yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + IMAGE_BYTES + b'\r\n')
             continue
         
@@ -106,6 +105,7 @@ def publish_stream():
 
 @app.route('/end_stream', methods=['POST'])
 def end_stream():
+    STREAM = None
     print('--------------- stream is Done')
     return 'OK', status.HTTP_200_OK
 

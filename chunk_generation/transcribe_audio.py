@@ -4,6 +4,8 @@ import os
 import sys
 import psutil
 
+MODEL_TYPE = "medium"
+
 def process_input(pid):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     allFiles = []  #check for a new audio file
@@ -49,7 +51,7 @@ def process_input(pid):
 
                     pass
                 
-                model = whisper.load_model("medium") # might change to another model for better accuracy
+                model = whisper.load_model(MODEL_TYPE) # might change to another model for better accuracy
                 time.sleep(1)
                 result = model.transcribe(audio_path, fp16=False) #transcribe audio and save to result
                 if CHUNK_NUM < 10:
@@ -66,4 +68,5 @@ def initialize():
     process_input(pid)
 
 if __name__ == "__main__":
+    #model = whisper.load_model("large-v2")
     initialize()

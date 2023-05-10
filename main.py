@@ -9,7 +9,7 @@ from configuration import Configuration
 
 PROCESSING = True
 SOURCE = "rtmp://localhost:1935/live/mystream"
-CHUNK_DUR = 60
+CHUNK_DUR = 90
 TEMP_AUDIO_OUTPUT_PATH = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/chunk_generation/generated_chunks/audio_chunks'
 
 def create_folders(dir_path):
@@ -41,18 +41,17 @@ def main(args):
     create_folders(dir_path)
 
     # ---------------- Initilize the processes
+    
+    #--- Old Processes
     #process_capture_stream = subprocess.Popen(['python', dir_path + '/chunk_generation/capture_stream.py'])
     #process_extract_audio_actions = subprocess.Popen(['python', dir_path + '/chunk_generation/extract_actions.py']) 
-
     
-   
-    
-    #--ActionSpotting
+    #--- ActionSpotting
     # process_generate_chunks = subprocess.Popen(['python', dir_path + '/chunk_generation/generate_chunks.py'])
     # process_generate_features = subprocess.Popen(['python', dir_path + '/feature_generation/generate_features.py', str(process_generate_chunks.pid)])
     # process_generate_output = subprocess.Popen(['python', dir_path + '/output_generation/generate_output.py', str(process_generate_features.pid)])
     
-    #--Generate Highlights [ChatGPT]
+    #--- Generate Highlights [ChatGPT]
     process_generate_audio_chunks = subprocess.Popen(['ffmpeg','-i', SOURCE, '-f', 'segment', '-segment_time', str(CHUNK_DUR), '-codec:a', 'pcm_s16le', '-ar', '44100' , '-ac', '2', TEMP_AUDIO_OUTPUT_PATH + '/output_%03d.wav'])
     process_transcribe_audio = subprocess.Popen(['python', dir_path + '/chunk_generation/transcribe_audio.py', str(process_generate_audio_chunks.pid)]) #rename to generate_transcription
     process_extract_highlights = subprocess.Popen(['python', dir_path + '/chunk_generation/extract_highlights.py']) 
@@ -62,8 +61,8 @@ def main(args):
 
     # --------------- Handling Program Exit
     def handling_program_exit(signal_number, frame):
-        #process_capture_stream.terminate()
-        #process_extract_audio_actions.terminate()
+        # process_capture_stream.terminate()
+        # process_extract_audio_actions.terminate()
         # process_generate_chunks.terminate()
         # process_generate_features.terminate()
         # process_generate_output.terminate()
