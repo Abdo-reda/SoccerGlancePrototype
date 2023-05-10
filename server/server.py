@@ -4,12 +4,21 @@ import subprocess
 import signal
 from flask_api import status
 import pprint
+from PIL import Image
+
 
 app = Flask(__name__)
 source = "rtmp://localhost:1935/live/mystream"
 STREAM = None #cv2.VideoCapture(source)
 HIGHLIGHTS = []
 ACTION = []
+DEFAULT_IMAGE = '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/server/static/SoccerGlanceLogo.png'
+IMAGE_BYTES = None
+IS_STREAM = False
+
+
+with open(DEFAULT_IMAGE, 'rb') as file:
+    IMAGE_BYTES = file.read()
 
 
 @app.route('/')
@@ -21,6 +30,21 @@ def index():
 def gen():
     """Generate the video frames and process them."""
     while True:
+        
+        global STREAM
+        global IS_STREAM
+        
+        if IS_STREAM :
+            print('---------------capturing the stream!!!!')
+            STREAM = cv2.VideoCapture(source)
+            IS_STREAM = False
+        
+        if STREAM is None: 
+            print('------------NONE')
+            yield (b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + IMAGE_BYTES + b'\r\n')
+            continue
+        
+        
         # Get the next video frame from the camera
         ret, frame = STREAM.read()
         # If the frame is valid, process it
@@ -71,10 +95,14 @@ def process_stream():
     process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])
     return 'Processing ...'
 
+
 @app.route('/publish_stream', methods=['POST'])
 def publish_stream():
+    global IS_STREAM
+    IS_STREAM = True
     print('--------------- stream is publishing with name', request.form['name'])
     return 'OK', status.HTTP_200_OK
+
 
 @app.route('/end_stream', methods=['POST'])
 def end_stream():

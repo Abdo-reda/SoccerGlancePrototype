@@ -140,6 +140,7 @@ for result in results:
 ----------- NGINX RTMP 
 
 
+ffmpeg -re -i /home/g05-f22/Downloads/MatchTest.mkv -c:v libx264 -preset veryfast -tune zerolatency -c:a aac -f flv rtmp://localhost:1935/live/mystream
 
 
 ---------------------
@@ -159,3 +160,4 @@ for result in results:
     . 
 
 * Summarization:
+
