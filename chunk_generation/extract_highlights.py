@@ -78,11 +78,7 @@ while True:
             except:
                 print('-----------could nt send to local server')
             
-            try:
-                response = requests.post(API_URL, headers=headers, json=json_obj)
-            except:
-                print('-----------could nt send to api server')
-            
+  
             # if response.status_code == 200:
             #     print("Request succeeded!")
             # else:
