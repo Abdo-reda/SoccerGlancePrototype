@@ -88,11 +88,22 @@ body {
     background-color: rgb(224, 236, 245); /* rgb(164, 208, 242)*/
     margin-left: 20%;
     margin-right: 20%;
+    margin-bottom: 5%;
     padding: 3%;
     border-radius: 15px;
     border: 2px solid rgb(18, 138, 229);;
 }
 
+.time-text{
+    color:rgb(212, 75, 75);
+    display: inline-block;
+    margin-bottom: 3px;
+}
+
+.highlight-text{
+    display: inline-block;
+    margin-top: 3px;
+}
 
 #header {
     justify-content: center;

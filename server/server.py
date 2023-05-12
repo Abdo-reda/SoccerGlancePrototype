@@ -28,6 +28,19 @@ with open(DEFAULT_IMAGE, 'rb') as file:
     IMAGE_BYTES = file.read()
 
 
+def tempTesting():
+    my_dict = {
+        "minutes": 7,
+        "seconds": 5,
+        "highlights": "this is a highlight" #response.lstrip('\n')
+    }
+
+    # -------- Send to API
+    json_obj = json.dumps(my_dict)
+    headers = {'Content-type': 'application/json'}
+    response = requests.post('http://localhost:5000/recieve_highlight', data=json_obj, headers=headers)
+
+
 @app.route('/')
 def index():
     """Render the HTML template with the video player."""
@@ -69,8 +82,8 @@ def view_feed():
     return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-@app.route('/recieve_higlight', methods=['POST'])
-def recieve_higlight():
+@app.route('/recieve_highlight', methods=['POST'])
+def recieve_highlight():
     json_data = request.get_json()   
     try:
         sendHighlight(

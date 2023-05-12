@@ -73,7 +73,7 @@ while True:
             headers = {'Content-type': 'application/json'}
             
             try:
-                response = requests.post('http://localhost:5000/recieve_higlight', data=json_obj, headers=headers)
+                response = requests.post('http://localhost:5000/recieve_highlight', data=json_obj, headers=headers)
                 print(my_dict)
             except:
                 print('-----------could nt send to local server')

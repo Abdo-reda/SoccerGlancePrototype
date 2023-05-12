@@ -6,8 +6,11 @@ from flask_api import status
 import pprint
 from PIL import Image
 
+from flask import Flask
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "*"}})
 HIGHLIGHTS = []
 
 
@@ -18,23 +21,17 @@ def index():
     return render_template('client.html')
 
 
-@app.route('/recieve_higlight', methods=['POST'])
-def recieve_higlight():
-    json_data = request.get_json()
-    global HIGHLIGHT
+@app.route('/recieve_highlight', methods=['POST']) 
+def recieve_highlight(): 
+    json_data = request.get_json() #match_id, body, highlight_action, match_time
+    print(json_data)
+    global HIGHLIGHTS
     HIGHLIGHTS.append(json_data)
-    return 'JSON received!'
+    return 'OK', status.HTTP_200_OK
 
 
 @app.route('/get_highlight', methods=['GET'])
 def get_highlight():
-    global HIGHLIGHT
-    tempDict = {
-        "minutes": "5",
-        "seconds": "30",
-        "highlights": "highlight" #response.lstrip('\n')
-    }
-    HIGHLIGHTS.append((tempDict))
     return (jsonify(HIGHLIGHTS))
 
 

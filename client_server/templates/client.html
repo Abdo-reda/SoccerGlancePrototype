@@ -26,11 +26,10 @@
         <div id="highlight-list">
           <p class="title">Match Highlights </p>
           <div id="unordered-highlights">
-            <div class="highlight-card" >
-            <!--  style="display:none;" -->
-              <p class="highlight-text"> <b> Time: </b> <span class="json-minutes"></span>:<span
-                class="json-seconds"></span> <br>
-                <b> Highlights: </b> <span class="json-highlight"> </span>
+            <div class="highlight-card" style="display:none">
+              <p class="highlight-text">
+                <span class="time-text"> <b> Time: </b>  <span class="json-time"></span> <br> </span>
+                <span class="highlight-text"> <b> Highlights: </b> <span class="json-highlight"> </span> </span>
               </p>
             </div>
           </div>
@@ -82,9 +81,8 @@
         let numHighlights = Object.keys(data).length;
         for (let i = numChildren - 1; i < numHighlights; i++) {
           let clonedHighlight = $(".highlight-card").clone();
-          clonedHighlight.find(".json-minutes").text(JSON.stringify(data[i]['minutes']));
-          clonedHighlight.find(".json-seconds").text(JSON.stringify(data[i]['seconds']));
-          clonedHighlight.find(".json-highlight").text(JSON.stringify(data[i]['highlights']));
+          clonedHighlight.find(".json-time").text(JSON.stringify(data[i]['match_time']).replace(/"/g, ''));
+          clonedHighlight.find(".json-highlight").text(JSON.stringify(data[i]['body']).replace(/"/g, ''));
           clonedHighlight.removeAttr("style");
           listElement.append(clonedHighlight);
         }
@@ -94,7 +92,7 @@
   };
 
   $(document).ready(function () {
-    //setInterval(updateHighlights, 5000);
+    setInterval(updateHighlights, 5000);
   });
 
 </script>
