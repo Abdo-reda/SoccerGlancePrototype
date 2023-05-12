@@ -122,7 +122,8 @@ def get_action():
 @app.route('/process_stream')
 def process_stream():
     print('------------------------------')
-    process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py'])
+    global SOURCE
+    process_main = subprocess.Popen(['python', '/home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/main.py', SOURCE])
     return 'Processing ...'
 
 

@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 from parameters import *
 from configuration import Configuration
+import sys
 
 PROCESSING = True
 SOURCE = "rtmp://localhost:1935/live/mystream"
@@ -36,6 +37,8 @@ def build_model_wrapper(model_configuration):
 
 def main(args):
     # ---------------- Initialize some stuff
+    global SOURCE
+    SOURCE = sys.argv[1]
     timer = time.time()
     dir_path = os.path.dirname(os.path.realpath(__file__))
     create_folders(dir_path)
