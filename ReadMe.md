@@ -1,7 +1,7 @@
 
 
 ### Setup Enviornment 
-* onda create -y -n PrototypeEnv python=3.9
+* conda create -y -n PrototypeEnv python=3.9
 * conda activate PrototypeEnv
 * conda install -y cudnn=8.2
 * conda install -y cudatoolkit=11.3
