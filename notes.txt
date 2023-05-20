@@ -4,7 +4,7 @@ TODO:
     * Make the folder Tests include logs
     * Should push processes to a list and then loop over that list and terminate them.
     * Also, I should look into why I coudn't generate highlights and actions at the same time 
-    * 
+    
 
 ------------ API stuff 
 
@@ -99,7 +99,7 @@ LD_LIBRARY_PATH: /home/g05-f22/miniconda3/envs/MyNewPrototype/lib/python3.9/site
 
 /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib
 
------ Installing TENSOR_RT
+---------- Installing TENSOR_RT
 
 Download TensorRT version: [https://developer.nvidia.com/nvidia-tensorrt-8x-download]
     - GA is stable version, EA stands for early access 
@@ -126,7 +126,7 @@ ln -s /home/g05-f22/Desktop/ActionSpotting/Others/TensorRT/TensorRT-8.5.3.1/lib/
 
 
 
---------- Whisper 
+--------------- Whisper 
 
 * start and end time for each utterance.
 for result in results:
@@ -137,7 +137,7 @@ for result in results:
 //an alternative approach .. https://github.com/linto-ai/whisper-timestamped or https://cloud.google.com/speech-to-text ?! maybe its bad actually, no capiche
 
 
------------ NGINX RTMP 
+-------------- NGINX RTMP 
 
 
 ffmpeg -re -i /home/g05-f22/Downloads/MatchTest.mkv -c:v libx264 -preset veryfast -tune zerolatency -c:a aac -f flv rtmp://localhost:1935/live/mystream
@@ -160,4 +160,32 @@ ffmpeg -re -i /home/g05-f22/Downloads/MatchTest.mkv -c:v libx264 -preset veryfas
     . 
 
 * Summarization:
+
+
+
+
+
+------------------- Old Notes 
+
+- Made the import inside the directories relative by using . 
+    //from .model import Model
+
+- Upgraded Tensorflow version hopefully this works ... why the internet so slow ....  original ==2.3.0 
+    https://www.tensorflow.org/install/pip
+
+- The missing library (7) is optional I think and is realted to tenosRT which is not needed right now ... 
+    //the actual 
+
+- Tensor RT is probably not needed ...
+
+- PCI_ID 0000:02:00.0 ... I think
+
+- Whisper requires python version 3.9, I am scared that if I change the python version then the whole prototype will collapse, could create another conda env just in case ...
+    - for new version git+https://github.com/openai/whisper.git
+    - for python=3.7 version openai-whisper==20230124
+
+- Something wrong when pip3 install -r requirements.txt, I am doing it one by one manually.
+    - I found the problem, it was opencv-python==3.4.11.41 
+    - I will install an updated opencv ... 
+
 

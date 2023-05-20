@@ -1,6 +1,3 @@
-api_service:
-  cookies: ''
-  match_id: ''
 feature_configuration:
   back_end: TF2
   feature_reducer_path: /home/g05-f22/Desktop/ActionSpotting/MyPrototype/SoccerNetPrototype/feature_generation/pca_512_TF2.pkl

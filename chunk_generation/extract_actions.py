@@ -2,7 +2,7 @@ import openai
 import time
 import os
 
-openai.api_key = "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"
+openai.api_key = "sk-0"
 model_engine = "text-davinci-003"
 
 dir_path = os.path.dirname(os.path.realpath(__file__))

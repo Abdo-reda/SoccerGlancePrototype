@@ -4,7 +4,7 @@ import os
 import json
 import requests
 
-openai.api_key = "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"
+openai.api_key = "sk-0"
 model_engine = "text-davinci-003"
 
 API_URL = "http://10.40.51.75:8000/"

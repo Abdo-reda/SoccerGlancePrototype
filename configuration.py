@@ -18,10 +18,6 @@ class Configuration:
         num_classes = 17
         model_name = 'NetVLAD++'
         data = {
-            'api_service': {
-                'cookies': '',
-                'match_id': ''
-            },
             'model_configuration': {
                 'weights': None,
                 'feature_dim': 512,  # input_size
